@@ -2,95 +2,266 @@
 % (c) Michal Bidlo, Bohuslav Křena, 2008
 
 \chapter{Úvod}
-Abychom mohli napsat odborný text jasně a~srozumitelně, musíme splnit několik základních předpokladů:
+Počítačové videnie zažíva v dnešnej dobe obrovský rozmach. Môžeme ho vidieť všade okolo nás. Skenovanie ŠPZ na parkoviskách a dialniciach,  riadenie dopravy, rozpoznávanie tváre a iné. Tento fenomén je spôsobený tým, že počítače dnešnej doby majú obrovský výkon a preto dokážu spracovať obrovské množstvo dát, ktoré sa z kamier dostávajú do počítača prakticky v reálnom čase. Ďalším dôvodom je fakt, že video z kamery sa ľudskému vnímaniu reality približuje najviac z pomedzi všetkých iných. 
+	
+V úvode práce je popísaný princíp fungovania bežnej web kamery a rôzne technológie snímania hĺbkových senzorov. V tejto kapitole sa práca zameriava aj na konkurenčné systémy, ktoré riešia podobnú tematiku.
+
+\section{Existujúce riešenia}
+Problematikou počítanie (detekovania) prechodov ľudí sa zaoberá celá rada aplikácii.  
+Jedna z najprimitívnejších je IR závora, ktorú bežne môžeme nájsť na hocijakej garážovej bráne. Je založená na princípe vysielača a prijímača. Vysielač vysiela infračervený lúč a keď niekto prejde, lúč sa zatieni a rele v prijímači sa zopne. Táto technológia má však veľmi veľa problémov a obmedzení. Najväčšim obmedzením je, že môže byť inštalovaná len v zúžených priestoroch, kde môže v jednom okamihu prechádzať len jeden človek. Toto tvrdenie sa opiera o fakt, že ak by išli dvaja alebo viacerí ľudia vedľa seba pre tento senzor to stále znamená len jedno zopnutie a teda jeden človek.
+Ďalšia asi najúspešnejšia a najpredávanejšia aplikácia je od firmy iriSys. Na počítanie ľudí využívajú termálne kamery. Toto riešenie je veľmi podobné riešeniu, ktoré bude ďalej opisovať táto práca. Výrobca uvádza, že ich produkt má 98\% spoľahlivosť. Avšak cena za najlacnejší model sa pohybuje okolo 1000eur za kus čo je nemalá suma. Ďalšou podstatnou nevýhodou je fakt, že človek môže mať na sebe veľkú vrstvu oblečenia, čo môže spôsobiť neviditeľnosť takého človeka pre systém. Problém môže nastať aj v prostredí, kde je okolitá teplota veľmi podobná ľudskému telu alebo sa v priestore pohybujú aj iné objekty, zanechávajúce tepelnú stopu.
+Ostatné riešenia sa poväčšine opierajú o technológiu obyčajnej kamery. Tento prístup je veľmi lacný, lebo kamera nemusí byť ničím výnimočná dokonca množstvo objektov má kamery už  predom inštalované. Postupom času rôzni výrobcovia, začali dokonca implementovať takéto technológie do firmwarov kamier za pomoci hardvérovej akcelerácie. Dokážu počítať ľudí, spustiť alarm pri narušení virtuálnej zóny či čítať ŠPZ áut. Pri testoch som však zistil, že presnosť takýchto služieb zo strany kamerových spoločností je skôr podpriemerná. 
+
+
+\chapter{Počítačové videnie}
+\section{Úvod}
+Počítačové videnie je vedná disciplína, ktorá sa snaží počítačovými prostriedkami napodobniť ľudské videnie. Základom je spracovanie 2D obrazu (Image Processing). Túto etapu väčšinou predstavujú algoritmy na nízkej úrovni abstrakcie (low-level). Algoritmy, ktoré extrahujú z nižšej úrovne znalosti, dávajú ich do súvislostí a snažia sa im porozumieť (Image understanding, machine learning) pracujú na vyššej úrovni (hight-level). To by nebolo možné bez znalosti fyzikálnej podstaty senzorov, optiky, okolitého prostredia a tiež matematických a štatistických metód na ich hodnotenie.
+
+\section{Najvýznamnejšie problémy počítačového videnia}
 \begin{itemize}
-\item Musíme mít co říci,
-\item musíme vědět, komu to chceme říci,
-\item musíme si dokonale promyslet obsah,
-\item musíme psát strukturovaně. 
+\item Strata informácie pri premietaní z 3D do 2D. Človek totiž vníma okolitý svet ako 3-rozmerný, väčšina senzorov však snímacích zariadení je schopná registrovať iba 2D
+\item Iterpretácia ľudského mozgu nieje správna. Sietnica ľudského oka je dvojrozmerná preto trojrozmernú prestavu okolia vytvára mozog, na základe znalostí
+\item Šum. Je prítomný v kažom reálnom obraze. Preto namiesto deterministických modelov je potrebné používať stochastické modely, ktoré predpokladajú určitý stupeň neurčitosti a dokážu túto neurčitosť aj zahrnúť do matematického modelu
+\item Obrovsksý tok dát prímaný zo snímačov obrazu, ktoré je nutné spracovať v reálnom čase
+\item Nejednoznačná interpretácia jasu jednotlivých častí objektu. Bez poznania fyzikálnej povahy sledovaného objektu nie sme schopní jednoznačne určiť či výrazne svetlé škvrny na obraze sú dôsledkom extrémne svetlých častí objektu alebo iba dôsledkom odrazu zdroja svetla v lesklej (ale nie svetlej) časti povrchu
 \end{itemize}
 
-Tyto a další pokyny jsou dostupné též na školních internetových stránkách \cite{fitWeb}.
 
-Přehled základů typografie a tvorby dokumentů s využitím systému \LaTeX je 
-uveden v~\cite{Rybicka}.
+\section{Etapy spracovania obrazu}
 
-\section{Musíme mít co říci}
-Dalším důležitým předpokladem dobrého psaní je {\it psát pro někoho}. Píšeme-li si poznámky sami pro sebe, píšeme je jinak než výzkumnou zprávu, článek, diplomovou práci, knihu nebo dopis. Podle předpokládaného čtenáře se rozhodneme pro způsob psaní, rozsah informace a~míru detailů.
+Jednotlivé etapy možno vyjadriť nasledovne
 
-\section{Musíme vědět, komu to chceme říci}
-Dalším důležitým předpokladem dobrého psaní je psát pro někoho. Píšeme-li si poznámky sami pro sebe, píšeme je jinak než výzkumnou zprávu, článek, diplomovou práci, knihu nebo dopis. Podle předpokládaného čtenáře se rozhodneme pro způsob psaní, rozsah informace a~míru detailů.
+OBRAZOK!!!!!!
 
-\section{Musíme si dokonale promyslet obsah}
-Musíme si dokonale promyslet a~sestavit obsah sdělení a~vytvořit pořadí, v~jakém chceme čtenáři své myšlenky prezentovat. 
-Jakmile víme, co chceme říci a~komu, musíme si rozvrhnout látku. Ideální je takové rozvržení, které tvoří logicky přesný a~psychologicky stravitelný celek, ve kterém je pro všechno místo a~jehož jednotlivé části do sebe přesně zapadají. Jsou jasné všechny souvislosti a~je zřejmé, co kam patří.
-
-Abychom tohoto cíle dosáhli, musíme pečlivě organizovat látku. Rozhodneme, co budou hlavní kapitoly, co podkapitoly a~jaké jsou mezi nimi vztahy. Diagramem takové organizace je graf, který je velmi podobný stromu, ale ne řetězci. Při organizaci látky je stejně důležitá otázka, co do osnovy zahrnout, jako otázka, co z~ní vypustit. Příliš mnoho podrobností může čtenáře právě tak odradit jako žádné detaily.
-
-Výsledkem této etapy je osnova textu, kterou tvoří sled hlavních myšlenek a~mezi ně zařazené detaily.
-
-\section{Musíme psát strukturovaně} 
-Musíme začít psát strukturovaně a~současně pracujeme na co nejsrozumitelnější formě, včetně dobrého slohu a~dokonalého značení. 
-Máme-li tedy myšlenku, představu o~budoucím čtenáři, cíl a~osnovu textu, můžeme začít psát. Při psaní prvního konceptu se snažíme zaznamenat všechny své myšlenky a~názory vztahující se k~jednotlivým kapitolám a~podkapitolám. Každou myšlenku musíme vysvětlit, popsat a~prokázat. Hlavní myšlenku má vždy vyjadřovat hlavní věta a~nikoliv věta vedlejší.
-
-I k~procesu psaní textu přistupujeme strukturovaně. Současně s~tím, jak si ujasňujeme strukturu písemné práce, vytváříme kostru textu, kterou postupně doplňujeme. Využíváme ty prostředky DTP programu, které podporují strukturovanou stavbu textu (předdefinované typy pro nadpisy a~bloky textu). 
+V nasledujúcom texte si postupne opíšeme každú fázu modelu. 
 
 
-\chapter{Několik formálních pravidel}
-Naším cílem je vytvořit jasný a~srozumitelný text. Vyjadřujeme se proto přesně, píšeme dobrou češtinou (nebo zpravidla angličtinou) a~dobrým slohem podle obecně přijatých zvyklostí. Text má upravit čtenáři cestu k~rychlému pochopení problému, předvídat jeho obtíže a~předcházet jim. Dobrý sloh předpokládá bezvadnou gramatiku, správnou interpunkci a~vhodnou volbu slov. Snažíme se, aby náš text nepůsobil příliš jednotvárně používáním malého výběru slov a~tím, že některá zvlášť oblíbená slova používáme příliš často. Pokud používáme cizích slov, je samozřejmým předpokladem, že známe jejich přesný význam. Ale i~českých slov musíme používat ve správném smyslu. Např. platí jistá pravidla při používání slova {\it zřejmě}. Je {\it zřejmé} opravdu zřejmé? A~přesvědčili jsme se, zda to, co je {\it zřejmé} opravdu platí? Pozor bychom si měli dát i~na příliš časté používání zvratného se. Například obratu {\it dokázalo se}, že... zásadně nepoužíváme. Není špatné používat autorského {\it my}, tím předpokládáme, že něco řešíme, nebo například zobecňujeme spolu se čtenářem. V~kvalifikačních pracích použijeme autorského {\it já} (například když vymezujeme podíl vlastní práce vůči převzatému textu), ale v~běžném textu se nadměrné používání první osoby jednotného čísla nedoporučuje.
-
-Za pečlivý výběr stojí i~symbolika, kterou používáme ke {\it značení}. Máme tím na mysli volbu zkratek a~symbolů používaných například pro vyjádření typů součástek, pro označení hlavních činností programu, pro pojmenování ovládacích kláves na klávesnici, pro pojmenování proměnných v~matematických formulích a~podobně. Výstižné a~důsledné značení může čtenáři při četbě textu velmi pomoci. Je vhodné uvést seznam značení na začátku textu. Nejen ve značení, ale i~v~odkazech a~v~celkové tiskové úpravě je důležitá důslednost.
-
-S tím souvisí i~pojem z~typografie nazývaný {\it vyznačování}. Zde máme na mysli způsob sazby textu pro jeho zvýraznění. Pro zvolené značení by měl být zvolen i~způsob vyznačování v~textu. Tak například klávesy mohou být umístěny do obdélníčku, identifikátory ze zdrojového textu mohou být vypisovány {\tt písmem typu psací stroj} a~podobně.
-
-Uvádíme-li některá fakta, neskrýváme jejich původ a~náš vztah k~nim. Když něco tvrdíme, vždycky výslovně uvedeme, co z~toho bylo dokázáno, co teprve bude dokázáno v~našem textu a~co přebíráme z~literatury s~uvedením odkazu na příslušný zdroj. V~tomto směru nenecháváme čtenáře nikdy na pochybách, zda jde o~myšlenku naši nebo převzatou z~literatury.
-
-Nikdy neplýtváme čtenářovým časem výkladem triviálních a~nepodstatných informací. Neuvádíme rovněž několikrát totéž jen jinými slovy. Při pozdějších úpravách textu se nám může některá dříve napsaná pasáž jevit jako zbytečně podrobná nebo dokonce zcela zbytečná. Vypuštění takové pasáže nebo alespoň její zestručnění přispěje k~lepší čitelnosti práce! Tento krok ale vyžaduje odvahu zahodit čas, který jsme jejímu vytvoření věnovali. 
+\subsection{Snímanie}
+Základným obmedzením pri vnímani okolitého 3D sveta je skutočnosť, že človek dokáže vnímať okolie len 2D, ktorý predstavuje len zjednodušený model 3D okolia.
 
 
-\chapter{Nikdy to nebude naprosto dokonalé}
-Když jsme už napsali vše, o~čem jsme přemýšleli, uděláme si den nebo dva dny volna a~pak si přečteme sami rukopis znovu. Uděláme ještě poslední úpravy a~skončíme. Jsme si vědomi toho, že vždy zůstane něco nedokončeno, vždy existuje lepší způsob, jak něco vysvětlit, ale každá etapa úprav musí být konečná.
+\subsubsection{Dierková komora} je to model kamery možno použiť ako prvú aproximáciu mapovania 3D scény do 2D obrazu. Je to analógia toho čo vzniká na sietnici ľudského oka. Obraz sa premieta do obrazovej roviny vzdialenej od dierky o ohniskovú vzialenosť f. V prípade, že sa zrkadlová rovina presunie pred rovinu projekcie z podobnosti trojuholníkov vyplýva tento vzorec:
 
 
-\chapter{Typografické a~jazykové zásady}
-Při tisku odborného textu typu {\it technická zpráva} (anglicky {\it technical report}), ke kterému patří například i~text kvalifikačních prací, se často volí formát A4 a~často se tiskne pouze po jedné straně papíru. V~takovém případě volte levý okraj všech stránek o~něco větší než pravý -- v~tomto místě budou papíry svázány a~technologie vazby si tento požadavek vynucuje. Při vazbě s~pevným hřbetem by se levý okraj měl dělat o~něco širší pro tlusté svazky, protože se stránky budou hůře rozevírat a~levý okraj se tak bude oku méně odhalovat.
 
-Horní a~spodní okraj volte stejně veliký, případně potištěnou část posuňte mírně nahoru (horní okraj menší než dolní). Počítejte s~tím, že při vazbě budou okraje mírně oříznuty.
-
-Pro sazbu na stránku formátu A4 je vhodné používat pro základní text písmo stupně (velikosti) 11 bodů. Volte šířku sazby 15 až 16 centimetrů a~výšku 22 až 23 centimetrů (včetně případných hlaviček a~patiček). Proklad mezi řádky se volí 120 procent stupně použitého základního písma, což je optimální hodnota pro rychlost čtení souvislého textu. V~případě použití systému LaTeX ponecháme implicitní nastavení. Při psaní kvalifikační práce se řiďte příslušnými závaznými požadavky.
-
-Stupeň písma u~nadpisů různé úrovně volíme podle standardních typografických pravidel. 
-Pro všechny uvedené druhy nadpisů se obvykle používá polotučné nebo tučné písmo (jednotně buď všude polotučné nebo všude tučné). Proklad se volí tak, aby se následující text běžných odstavců sázel pokud možno na {\it pevný rejstřík}, to znamená jakoby na linky s~předem definovanou a~pevnou roztečí.
-
-Uspořádání jednotlivých částí textu musí být přehledné a~logické. Je třeba odlišit názvy kapitol a~podkapitol -- píšeme je malými písmeny kromě velkých začátečních písmen. U~jednotlivých odstavců textu odsazujeme první řádek odstavce asi o~jeden až dva čtverčíky (vždy o~stejnou, předem zvolenou hodnotu), tedy přibližně o~dvě šířky velkého písmene M základního textu. Poslední řádek předchozího odstavce a~první řádek následujícího odstavce se v~takovém případě neoddělují svislou mezerou. Proklad mezi těmito řádky je stejný jako proklad mezi řádky uvnitř odstavce.
-
-Při vkládání obrázků volte jejich rozměry tak, aby nepřesáhly oblast, do které se tiskne text (tj. okraje textu ze všech stran). Pro velké obrázky vyčleňte samostatnou stránku. Obrázky nebo tabulky o~rozměrech větších než A4 umístěte do písemné zprávy formou skládanky všité do přílohy nebo vložené do záložek na zadní desce.
-
-Obrázky i~tabulky musí být pořadově očíslovány. Číslování se volí buď průběžné v~rámci celého textu, nebo -- což bývá praktičtější -- průběžné v~rámci kapitoly. V~druhém případě se číslo tabulky nebo obrázku skládá z~čísla kapitoly a~čísla obrázku/tabulky v~rámci kapitoly -- čísla jsou oddělena tečkou. Čísla podkapitol nemají na číslování obrázků a~tabulek žádný vliv.
-
-Tabulky a~obrázky používají své vlastní, nezávislé číselné řady. Z toho vyplývá, že v~odkazech uvnitř textu musíme kromě čísla udat i~informaci o~tom, zda se jedná o~obrázek či tabulku (například ``... {\it viz tabulka 2.7} ...''). Dodržování této zásady je ostatně velmi přirozené.
-
-Pro odkazy na stránky, na čísla kapitol a~podkapitol, na čísla obrázků a~tabulek a~v~dalších podobných příkladech využíváme speciálních prostředků DTP programu, které zajistí vygenerování správného čísla i~v~případě, že se text posune díky změnám samotného textu nebo díky úpravě parametrů sazby. Příkladem takového prostředku v~systému LaTeX je odkaz na číslo odpovídající umístění značky v~textu, například návěští ($\backslash${\tt ref\{navesti\}} -- podle umístění návěští se bude jednat o~číslo kapitoly, podkapitoly, obrázku, tabulky nebo podobného číslovaného prvku), na stránku, která obsahuje danou značku ($\backslash${\tt pageref\{navesti\}}), nebo na literární odkaz ($\backslash${\tt cite\{identifikator\}}).
-
-Rovnice, na které se budeme v~textu odvolávat, opatříme pořadovými čísly při pravém okraji příslušného řádku. Tato pořadová čísla se píší v~kulatých závorkách. Číslování rovnic může být průběžné v~textu nebo v~jednotlivých kapitolách.
-
-Jste-li na pochybách při sazbě matematického textu, snažte se dodržet způsob sazby definovaný systémem LaTeX. Obsahuje-li vaše práce velké množství matematických formulí, doporučujeme dát přednost použití systému LaTeX.
-
-Mezeru neděláme tam, kde se spojují číslice s~písmeny v~jedno slovo nebo v~jeden znak -- například {\it 25krát}.
-
-Členicí (interpunkční) znaménka tečka, čárka, středník, dvojtečka, otazník a~vykřičník, jakož i~uzavírací závorky a~uvozovky se přimykají k~předcházejícímu slovu bez mezery. Mezera se dělá až za nimi. To se ovšem netýká desetinné čárky (nebo desetinné tečky). Otevírací závorka a~přední uvozovky se přimykají k~následujícímu slovu a~mezera se vynechává před nimi -- (takto) a~``takto''.
-
-Pro spojovací a~rozdělovací čárku a~pomlčku nepoužíváme stejný znak. Pro pomlčku je vyhrazen jiný znak (delší). V~systému TeX (LaTeX) se spojovací čárka zapisuje jako jeden znak ``pomlčka'' (například ``Brno-město''), pro sázení textu ve smyslu intervalu nebo dvojic, soupeřů a~podobně se ve zdrojovém textu používá dvojice znaků ``pomlčka'' (například ``zápas Sparta -- Slavie''; ``cena 23--25 korun''), pro výrazné oddělení části věty, pro výrazné oddělení vložené věty, pro vyjádření nevyslovené myšlenky a~v~dalších situacích (viz Pravidla českého pravopisu) se používá nejdelší typ pomlčky, která se ve zdrojovém textu zapisuje jako trojice znaků ``pomlčka'' (například ``Další pojem --- jakkoliv se může zdát nevýznamný --- bude neformálně definován v~následujícím odstavci.''). Při sazbě matematického mínus se při sazbě používá rovněž odlišný znak. V~systému TeX je ve zdrojovém textu zapsán jako normální mínus (tj. znak ``pomlčka''). Sazba v~matematickém prostředí, kdy se vzoreček uzavírá mezi dolary, zajistí vygenerování správného výstupu.
-
-Lomítko se píše bez mezer. Například školní rok 2008/2009.
-
-Pravidla pro psaní zkratek jsou uvedena v~Pravidlech českého pravopisu \cite{Pravidla}. I~z~jiných důvodů je vhodné, abyste tuto knihu měli po ruce. 
+OBRAZOK Vzorec
 
 
-\section{Co to je normovaná stránka?}
-Pojem {\it normovaná stránka} se vztahuje k~posuzování objemu práce, nikoliv k~počtu vytištěných listů. Z historického hlediska jde o~počet stránek rukopisu, který se psal psacím strojem na speciální předtištěné formuláře při dodržení průměrné délky řádku 60 znaků a~při 30 řádcích na stránku rukopisu. Vzhledem k~zápisu korekturních značek se používalo řádkování 2 (ob jeden řádek). Tyto údaje (počet znaků na řádek, počet řádků a~proklad mezi nimi) se nijak nevztahují ke konečnému vytištěnému výsledku. Používají se pouze pro posouzení rozsahu. Jednou normovanou stránkou se tedy rozumí 60*30 = 1800 znaků. Obrázky zařazené do textu se započítávají do rozsahu písemné práce odhadem jako množství textu, které by ve výsledném dokumentu potisklo stejně velkou plochu.
+Tento výraz predstavuje najjednoduchší model dierkovej kamery, ktorý je základom zložitejších modelov slúžiacich na výpočty napr. pri 3D projekcii. 
 
-Orientační rozsah práce v~normostranách lze v~programu Microsoft Word zjistit pomocí funkce {\it Počet slov} v~menu {\it Nástroje}, když hodnotu {\it Znaky (včetně mezer)} vydělíte konstantou 1800. Do rozsahu práce se započítává pouze text uvedený v~jádru práce. Části jako abstrakt, klíčová slova, prohlášení, obsah, literatura nebo přílohy se do rozsahu práce nepočítají. Je proto nutné nejdříve označit jádro práce a~teprve pak si nechat spočítat počet znaků. Přibližný rozsah obrázků odhadnete ručně. Podobně lze postupovat i~při použití OpenOffice. Při použití systému LaTeX pro sazbu je situace trochu složitější. Pro hrubý odhad počtu normostran lze využít součet velikostí zdrojových souborů práce podělený konstantou cca 2000 (normálně bychom dělili konstantou 1800, jenže ve zdrojových souborech jsou i~vyznačovací příkazy, které se do rozsahu nepočítají). Pro přesnější odhad lze pak vyextrahovat holý text z~PDF (např. metodou cut-and-paste nebo {\it Save as Text...}) a~jeho velikost podělit konstantou 1800. 
+\subsubsection{Prevedenie obrazu do počítača (snímanie)}
+Je proces transformácie fyzikálneho obrazu do podoby vhodne pre spracovanie za pomoci počítača (matica pixlov). Tento proces sa skladá z troch častí: 
+\begin{itemize}
+\item \textbf{Snímanie} (scaning) - Cieľom prvého kroku je prevod optických veličín na elektrické. Pri použití nekvalitného snímača sa na výstupe objavý veľké množsto šumu, ktoré len ťažko možno korigovať. Preto je nutné dbať na zaistenie čo najväčšej kvality snímača. 
+
+\item \textbf{Vzorkovanie} - Shanonova veta i vzorkovaní nám vraví, že vzorkovacia frekvencia musí byť aspoň 2x väčšia než je maximálna frekvencia, ktorú obsahuje vzorkovací signál.
+
+OBRAYOK !!!
+
+
+V obrazovej terminológii nám táto veta vraví, že interval vzorkovania musí byť menší alebo rovný polovici rozmerov najmenších detailnou na obraze. 
+
+\item \textbf{Kvantovanie} 
+Kvantovanie je prevod hodnoty obrazovej funkcie do číselnej hodnoty. Vždy je to proces stratový a nevratný. Počet kvantovacích bodov musí byť dostatočne jemný. Najčastejšie sa v praxi používa 256 úrovní jasu, čo vieme zakódovať do 8 bitov. Výnimku tvoria binárne obrazy ktoré si vystačia len s dvoma úrovňami 0 a 1. Často sa používa na vytvorenie masky v ktorej možno ľahko nájsť kontúry. Najväčší problém kvantovania na nedostatočný počet úrovní je vnímanie falošných hrán. Možno odstrániť nelineárnim kvantovaním, alebo rozostrením obrazu. 
+
+
+
+\item \textbf{Dátové štruktúry} - Najčastejšou reprezentáciu celého obrazu je \textbf{matica} hodnôt. Súradnice prvku v matice zobpovedajú súradniciam pixelu na obraze. Jeho hodnota zodpovedá napríklad jasu.  Okrem nej sa však používajú aj iné ako napríklad kódovanie kontúr segmentovaných objektov. Kontúra je uzavretá hranica objektu, ktorá môže reprezentovať objekt reálneho sveta na obraze a môže byť zdrojom informácii o ňom(tvar, farba, veľkosť).
+
+Ďalšou možnosťou kódovania je \textbf{Run-length coding} forma reťazového kódu, použitá hlavne v binárnych obrazoch. 
+
+\textbf{Freemanov (reťazcový) kód}  je určený počiatočným bodom a postupnosťou symbolov zodpovedajúcich úsečkám jednotkovej dížky v niekoľkých vopred stanovených orientáciách. 
+
+\textbf{Polygonálna reprezentácia hranice} je reprezentácia, ktorá aproximuje oblasť mnohouholníkom. Každá hranica je jednoznačne určená vrcholmi aproximovaného mnohouholníka.
+
+\textbf{Hierarchické dátové štruktúry} obsahuje okrem originálneho obrazu aj jeho zjednodušené časti. Typicky tieto dátové štruktúry pomáhajú znižovať výpočetnú náročnosť a to tak, že sa algoritmus najprv pustí na hrubšiu aproximáciu obrazu, kde sa vytipujú záujmové oblasti a ďalej sa algoritmus aplikuje už len na vybrané časti originálneho obrazu. Základné hierarchické reprezentácie sú pyramídy a kvadrantové stromy. 
+
+\end{itemize}
+
+
+
+\subsection{Predspracovanie obrazu}
+Vstupom aj výstupom je obraz na nízkej úrovni abstrakcie. Slúži na zlepšenie obrazu z hadiska ďalšieho spracovania. Môže potlačiť alebo naopak zvýrazniť isté informácie v obraze. Metódy predspracovania delíme na: 
+\begin{itemize}
+\item Bodové jasové transformácie
+\item Geometrické transformácie
+\item Lokálne predspracovanie (filtrácia, ostrenie a detekcia hrán)
+\item Obnovenie obrazu pri známej degradácii 
+\item Matematická morfológia 
+\end{itemize}
+
+\subsubsection{Bodové jasové transformácie}
+
+\textit{Jasová korekcia} - Používa sa pri nerovnomernom osvetlení obrazu. Pokiaľ je porucha
+osvetlenia systematická, vieme korigovať odchýlku každého bodu od ideálnej charakteristiky.
+
+\textit{Modifikácia jasovej stupnice} - Na rozdiel od jasovej korekcie, modifikácia stupnice nezávisí na polohe bodu vobraze. Táto modifikácia T prevedie vstupnú jasovú hodnotu na výstupnú a to pomocou známej funkcie (tabuľky). 
+
+
+\subsubsection{Geometrické transformácie}
+Geometrická kransformácia 2D obrazu je vekorová transformácia T, ktorá zobrazí bod (x,y) do bodu (x0, y0).  Jedná sa teda o transformáciu súradníc bodov obrazu. Vďaka tomu môžeme odstrániť geometrické skreslenie vzniknuté pri snímaní obrazu (napr. korekcie geometrických porúch objektívu kamery, oprava skreslenia družicového snímku spôsobená zakrivením zemegule).  Z toho vyplýva, že pomocou referenčnej mriežky vieme vyrovnať geometricky deformovaný obraz. Transformačné rovnice môžu byť známe alebo odvodené na základe vstupného a transformačného  obrazu. Pred začiatko transformácie sa musia nájsť dvojice zodpovedajúcich si bodov (lícovacie body), ktoré sa na obrázkoch ľahko hľadajú napr. priesečníky vláknitých štruktúr, rohy objektov a pod. Následne sa vykoná transformácia súradníc bodov do nových pozícii. A nakoniec sa musí vykonať aproximácia jasovej funkcie.
+
+\subsubsection{Lokálne predspracovanie - filtrácia}
+Používa sa na odstránenie vysokofrekvenčných zložiek, čo predstavujú hrany a šum. Pri tejto operácii dochádza k stratení detajlov obrazu (rozmazanie).
+
+\textit{Spriemerovanie} - Ide o najjednoduchší prostriedok pre vyhladenie šumu v obraze. Pre každý bod obrazu sa jeoho jas nahradí aritmetickým priemerov jasov jeho susedov. Filtrácia priemerovaním je vlastne špecialny prípad konvolúcie, kde konvolučná maska vyzerá nasledovne:
+
+
+\textit{Filtrovanie pomocou Gaussovej masky} - Galusovú masku dostaneme posilnením stredového bodu prípadne jeho štiroch susedov tak aby lepšie aproximoval šum s galussovým rozdelením.
+
+
+\textit{Mediánový filter} - Medián alebo prostredná hodnota je hodnota, ktorá rozdeľuje postupnosť podľa veľkosti zoradených výsledkov na dve rovnako početné polovice. V štatistike patrí medzi stredné hodnoty. Usporiadame jasové úrovne z lokálneho okolia a vyberieme strednú hodnotu usporiadania. To zabráni, aby krajné extrémy ovplyvnili vybranú hodnotu. Filtŕacia však nieje vhdná v obraze kde sa nachádzajú tenké čiary a ostré rohy. 
+
+
+\subsubsection{Lokálne predspracovanie - Detekcia hrán}
+Opak filtrácie, zvyšuje vysokofrekvenčné časti spektra (hrán) a odstránenie nízkofrekvenčných častí. Sprievodný javom je aj zvýraznenie šumu v obraze.  Hrana je vektorová veličina určená veľkostnou a smerom. Pri hranovej detekcii sa využíva vlastnosť gradientu, že hodnota gradientu funkcie dvoch premenných je v oblasti hrany najväčšia. 
+
+\textit{Laplacov operátor} - Tento operátor aproximuje druhú deriváciu a predstavuje rýchlosť zmeny hodnôt jasu. Prejaví sa najmä na strmých alebo izolovaných hranách alebo ju možno použiť na detekciu izolovaných bodov- bude zvýrazňovať aj šum
+
+
+Spolu s Laplaceovým operátorom sa používa i vyhladzovací Gaussovnský filter. Vtedy hovoríme o Laplaciáne Gaussiánu – LoG (matica h).
+Sobelov operátor aproximuje prvé parcialne derivácie. Nakoľko samotná derivácia zvýrazňuje šum, vykonáva ja vyhladzovanie. Pre každý smer hrán existuje špeciálna maska.
+
+
+\subsection{Segmentácia obrazu}
+Segmentácia je rozdelenie obrázku na časti ktoré silne korelujú s objektami reálneho sveta. Pri čiastočnej segmentácii je cieľom rozdeliť obraz na časti, ktoré sú homogénne z hladiska vybranej vlastnosti (farba, jas, odrazivosť atd …) Cieľom segmentácií v počítačovom videní je značná redukcia objemu dát. Nejednoznačnosť obrazových dát je hlavným problémom segmentačného procesu. Segmentačné metódy možno rozdeliť na tri skupiny: 
+
+
+\begin{itemize}
+\item Prahovanie
+\item Segmentácia založená na hranách (diskontinuita)
+\item Segmentácia založená na oblastiach (podobnosť)
+\end{itemize}
+
+\subsubsection{Prahovanie}
+Najjednoduchšia segmentačná technika. Je založená na predpoklade, že jednotlivé objekty majú konštantnú obrazivosť či pohltivosť svetla na svojom povrchu. Je to transformácia, ktorá zobrazuje vstupný obraz f(i, j) na výstupný obraz g(i, j) nasledovne: 
+
+
+
+Z toho vyplýva, že na segmentovanie objektov od pozadia sa používa jasová konštanta, ktorá sa nazýva prah. 
+
+
+\textit{Globálne prahovanie} - Je to technika ktorá je vhodná, keď sa objekty na scéne diametrálne líšia svojimi charakteristikami. V takom prípade môžeme nastaviť prah ako interval platných hodnôt. Príklad použitia môžeme vidieť na obrázku s kačkou. Originálny obrázok sa konvertuje do HSV farebného priestoru, ktorý umožňuje lepšiu prácu s odtieňmi farieb spôsobené nehomogénnym osvetlením. Následne sa aplikuje filter ktorý prepustí len hodnoty v danom intervale.
+
+\textit{Lokálne prahovanie} - Málokedy je možné použiť jednu hodnotu prahu (alebo interval) na celý obraz, z dôvodu fyzikálnym podobnostiam objektov v scéne a  nehomogénnemu osvetleniu scény. Preto sa často používajú etódy lokálneho prahovania. Algoritmi sa počítajú v malých regiónoch obrazu. Tak dostaneme rôzne prahové hodnoty pre rôzne regióny rovnakého obrazu a to nám dáva lepšie výsledky u snímok s rôznym osvetlením. Môžeme ho definovať takto : 
+
+
+kde fc je časť obrazu v ktorej sa určuje prah. 
+
+\subsubsection{Segmentácia na základe detekcie hrán}
+Techniky založené na informáciach, ktoré poskytujú hrany v obraze. Preto je  nutné si vysvetliť aký rozdiel je medzi pojmom hrana a hranica. Hrana je miesto kde sa skokovito mení hodnota obrazovej funkcie. Pre účely segmentácie sú však dôležitejšie hranice regiónov.  Region je množina súvislých bodov a hranicu regiónu je množinu bodov, ktoré sú súčasťov regiónu, ale zároveň aspoň jeden z ich susedov nepatri regiónu. Takáto hranica tvorí vnútornú hranicu regiónu. 
+
+\textbf{Metóda sledovania hranice}
+Táto metóda pracuje na binárnom obraze. Vnútornú hranicu získame tak, že  prehľadávame obraz zľava do prava, zhora dole, pokiaľ nenarazíme na bod patriaci regiónu. Tento bod pridáme do hranice. Nasledovne prehľadávame okolie tohoto bodu v protismere hodinových ručičiek od posledne navštíveného bodu. Pokiaľ narazíme na bod, ktorý je patriaci do rovnakého regionu, pridáme ho do hranice. Tento postup opakujeme dokiaľ sa nedostaneme naspäť k počiatočnému bodu. 
+
+Algoritmus nájde iba vnútorne hranice. Pokiaľ chcem nájsť vonkajšie hranice, môžeme ich získať tak že, nájdeme vnútorné. Potom vonkajšiu hranicu tvoria body, ktoré sme pri vyhľadávaní vnútornej hranice testovali, ale nepatrili do regiónu. 
+
+Tento algoritmus funguje pre oblasti väčšie než 1 pixel.  Ide o veľmi obľúbený a účinný algoritmus, ktorý sa veľmi často používa.
+
+\textbf{Cannyho detektor}
+Jeden z najlepších a najpoužívanejších algoritmov pre detekciu hrán, ktorý je založený na hľadaní hodnoty gradientu a spoľahlivosti bodu na základe susedných bodoch. Požiadavky na úspešnosť sú presnosť, minimálny počet chýb a jednoznačnosť. 
+
+Prvý krok algoritmu je eliminácia šumu použitím \textit{Gaussovho filtra}.  Následne nájdeme miesto a smer gradientu použitím \textit{Sobelového operátora}. Ďalej musíme odobrať z hodnôt gradientu  body, ktoré nie sú lokálne maximá. Napríklad, ak máme pixel, ktorým prechádza zvislá hrana, musí byť jeho ľavý a pravý sused nižšej hodnoty, aby bol uznaný  ako skutočná hrana. V poslednom kroku musíme uplatniť metódu \textit{prahovania s hysteréziou}. Zvolíme si minimálny (T1) a maximálny (T2) prah medzi ktorým môže gradient kolísať.  Ak je hodnota gradientu pixelu vyššia než T2 je pixel označený ako hranový. Ak hodnota bodu leží medzi T1 a T2 bod je uznaný ako hranový len vtedy, ak leží vedľa suseda označeného ako hranový.
+
+
+\textbf{Hľadanie hráníc Houghovou transformáciou}
+Pomocou tejto metódy je možné nájsť v obraze objekt, ktorého tvar je možné popísať analytickým výrazom (priamka, kruh, elipsa …). Veľkou výhodov je invariantnosť metódy na zmenu mierky, pootočenie a veľká odolnosť voči pôsobeniu šumu v obraze. 
+
+\subsubsection{Segmentácia založená na spájaní a delení oblastí}
+Metódy tejto kategórie nehľadajú hranice jednotlivých regiónov ale snažia sa o nájdenie oblastí priamo. Hlavná myšlienka je založená na klasifikácii obrazu do niekoľkých spojitých homogénnych podoblastí,  ktoré sú vzájomne disjunktné, pričom zjednotením podoblastí je celý obraz.
+
+
+Medzi základné podmienky segmentácie patrí kritérium homogenity:
+
+
+kde S je celkový počet regiónov v obraze a H(Ri) je hodnota binárne homogenity regiónu Ri. Prvá podmienka sa týka vlastností, ktoré musia spĺňať pixely v segmentovanom regióne, druhá určuje, že susedné regióny Ri a Rj majú odlišné veľkosti. Existuje veľké množstvo metód založené na segmentácii regiónov, pričom sa z výkonnostného hľadiska veľmi nelíšia. Veľkov výhodov metód tejto kategórie je odolnosť voči šumu, preto v prípadoch veľkého zašumenia obrazu sú lepšou cestou oproti metódam založených na detekcii hrán avšak na úkor väčšej výpočetnej  náročnosti.  
+
+\subsection{Príznaky a rozpoznávanie}
+Proces segmentácie zaručuje, že obraz bol rozdelený do vzájomne disjunktných častí. To však vo väčšine prípadov nestačí a je nutné rozdeliť jednotlivé regióny tak, aby korelovaly s objektami reálneho sveta. To si však vyžaduje vytvoriť exaktný popis oblastí. Až na základe neho môže klasifikátor rozdeliť jednotlivé objekty do tried.  Z toho vyplýva, že proces segmentácie bezprostredne predchádza procesu klasifikácie.  Tento proces však nieje vždy nutný. Ak je cieľom odlíšenie objektov od pozadia výsledkom takejto snahy je binárny obraz, kde objekty záujmu sú biele a nepodstatné okolie čierne.
+Rozpoznávanie je klasifikačná úloha. Existujú dve základné formy opisu objektu, podľa nich delíme aj metódy rozpoznávania na dve základné skupiny: 
+
+\begin{itemize}
+\item Príznakové - príznaky popisujúce objekt 
+\item Syntaktické - pomocou primitív (formálne gramatiky, produkčné pravidlá, fuzzy logika)
+\end{itemize}
+
+\subsubsection{Skalárne deskriptory}
+Je to výsledok merania ktorý kvantifikuje nejakú vlastnosť. Medzi jednoduché skalarne deskriptory  patria napríklad veľkosť,  okrúhlosť, obvod dĺžka hlavnej osi, uhol hlavnej osi, tažisko,  projekcia, výška, šírka, výstrednosť, pozdĺžnosť, pravouhlosť, smer, nekompaktnosť, Feretov priemer a iné. 
+
+Tvarové invarianty. Sú to deskriptory tvaru objektu, ktoré sú invariantné k určitej triede transformácii.
+Často používané sú aj viacrozmerné skalárne deskriptory medzi ktoré patrí napríklad obraz, histogram alebo kombinácia skalárnych deskriptorov.
+
+\subsubsection{Momenty}
+
+Jeho všeobecná definícia je takáto:
+
+Na základe momentov je možné vypočítať charakteristiky oblastí, ako napríklad tažisko takto: 
+
+
+Následne je možné definovať centrálny moment, ktorý je invariantný voči posunu. 
+
+
+\subsubsection{Štatistické metódy rozoznávania}
+Tieto metódy úzko súvisia s pojmom klasifikácia a ich základom sú štatistické postupy. Klasifikátor je nástroj, ktorý na základe príznakov zaradí objekty do tried. Funkcie, ktoré oddeľujú jednotlivé triedy sú diskriminačné funkcie. Pokiaľ ich vieme znázorniť ako priamku, ide o lineárne klasifikároty. Existujú tri typy klasifikátorov: 
+
+\begin{itemize}
+\item Deterministický  – Založený na diskriminačných funkciach, určitá vzorka je vždy zaradená do určitej triedy 
+\item Stochastický -  Založený na pravdepodobnosti, že klasifikátor zaradí niektorý z objektov do nesprávnej triedy (každe rozhodnutie nesie riziko chyby).  Napríklad Bazesov klasifikátor
+\item Heuristický - neurónové siete, k-najbližších susedov, logistická regresia, Support Vector  Machines (SVM), rozhodovacie stromy (Decision trees) 
+\end{itemize}
+
+\subsection{3D snímanie priestoru}
+Základným princípom je projekcia lúčou odrazených od 3D objektov sveta na 2D plochu snímača. Pri tomto procese však dochádza k rôznym efektom pri ktorých sa stráca veľa informácii. Napríklad premietanie viacerých bodov 3D scény do jedného bodu na 2D senzore, prekrývanie objektov alebo aj šum. Existujú však metódy, ktorým sa darí dané problémy eliminovať a dosiahnuť tak  hlavný cieľ, ktorým je porozumieť 3D snímanej scéne. Metódy 3D snímania možno deliť do dvoch základných skupín: 
+
+\begin{itemize}
+\item Pasívne metódy
+\item Aktívne metódy 
+\end{itemize}
+
+\subsubsection{Pasívne metódy - stereo videnie}
+Tieto metódy potrebujú pre snímanie scény zisk z dvoch kamier zo vzájomne rôznou pozíciou a ľubovolným uhlom. 
+
+
+V nasledujúcom texte sa však obmedzíme na situáciu A. Obe kamery snímajú scénu bod rovnakým uhlom a zo známou vzdialenostnou medi nimi. Táto situácia je rovnaká ako v ľudskom videní, len namiesto očí pracujeme s kamerami. Táto metóda je založená na triangulácii čo je orientácia snímkovej dvojice. 
+
+
+podobnosti trojuholníkov potom platí:
+
+
+ Z obrázka vyplýva, že pri známich veličinách f (ohnisková vzdialenosť) a d (vzdialenosť kamier od seba) vieme vypočítať pre každý pixel jeho hĺbku. Je to možné na základe disparity, čo je rozdiel medzi polohou bodu snímaného jednou kamerou oproti pozícii toho istého bodu snímaného druhov kamerou. Takže každý pixel scény pozorovanej dvoma kamerami má istú hodnotu disparity. Čim je vzdialenosť od kamier väčšia, tým je táto hodnota menšia a čím je vzdialenosť menšia hodnota disparity je väčšia. Implementácia je veľmi náročná. Vyžaduje si presné technické špecifikácie kamier a algoritmy  koré dokážu nájsť korešpondujúce body sú zložité. Najpoužívanejším je RANSAC. 
+
+Pre kamery ktoré nie sú umiestnené v rektifikovanej  polohe sa používa epipolárna geometria. 
+
+
+\subsubsection{Postupné ostrenie obrazu }
+Pokiaľ máme k dispozícii kvalitnú kameru, ktorá dokáže selektívne zaostrovať na určitú vzdialenosť, vieme postupným procesom získať hĺbku každého pixelu, podľa momentu kedy bol správne zaostrený. To, či je obraz na určitom mieste zaostrený, je možné určiť pomocou rôznych lokálnych operátorov známych z detektorou hrán (kapitola xxx). 
+
+
+\subsubsection{Aktívna triangulácia }
+Základným znakom je pridanie dodatočnej informácie do scény. Táto informácia môže byť reprezentovaná laserom, ifražiaričom alebo projektorom. Tieto metódy sa charakterizujú ako optické metódy merania vzdialenosti. Optické metódy sú také, ktoré meranie vykonávajú určitým optický lúčom.  Meranie je teda realizované postupným premietaním vzoru na predmet a následným zachytením kamerou. Podľa deformácie premietaného vzoru je možné následne určiť hĺbkovú mapu priestoru.
+
+\subsection{Analýza pohybu }
+Väčšina aplikácii, ktoré rieši počítačové videnie spočíva v nájdení, rozpoznaní a následom sledovaní objektu, ktorý sa pohybuje po scéne. 
+
+Veľmi používaná je detekcia samotného pohybu. V tomto druhu aplikácii statická kamera sleduje určitú scénu a je cieľom zistiť nežiadaný pohyb na sledovanej scéne. Ide o veľmi jednoduché aplikácie implementované napríklad aj v bezpečnostných kamerách ako inteligentná spúšť nahrávania.  Algoritmy nemajú za úlohu riešiť smer ani trajektóriu pohybu, sú schopné len vyrátať o koľko sa zmenila scéna oproti referenčnej vzorke. Jedna z najpoužívanejších metód je diferenčná metóda. Detekcia lokalizácia a predikcia pohybujúceho sa predmetu oproti detekcii samotného pohybu tieto metódy mají  za úlohu zistiť aj trajektóriu a vyrátať predikciu ďalšej polohy objektu. Medzi najkomplikovanejšie situácie patria tie, pri ktorých sa naraz môže pohybovať kamera ja objekt súčasne.
+
+\subsubsection{Kalmanov filter}
+Pri analýze pohybu objektu veľmi často dochádza k spájaniu, zatieňeniu či zmiznutiu sledovaného  objektu na obraze. Z toho dôvodu by sme potrebovali prostriedok, ktorý by spĺňal nasledovné podmienky: 
+
+
+Očakávaná hodnota odhadu by mala byť rovná očakávanej hodnote stavu - Potrebujeme priemernú hodnotu odhadovaného stavu. Je nežiaduce aby odhadovaná hodnota bola posunutá nahor alebo nadol. 
+Chceme nájsť taký prostriedok pre odhad, ktorý má čo najmenšiu variaciu chyby - odhadovaná a následne nameraná hodnota by sa mala líšiť minimálne. 
+
+
+
+Všetky tieto predpoklady spĺňa práve Kalmanov filter, avšak je možné ho použiť len vtedy ak  meraný systém je opísateľný iným lineárnym systémom. Je to z dôvodu aby Kalmanov filter nebol ovplyvnený šumom. Kalmanov filter teda hladá najoptimálnejším odhad budúceho stavu na základe stavou minulých a popisu systému.  Existuje už vyše 50 rokov, no stále je jedným z najdôležitejším, a najodporučanejším algoritmom.
+
+
+
+
+
+
+Hrubý odhad je predchádzajúci odhad polohy pred aktualizáciou merania. V časti aktualizácia merania už naozaj odhadneme nasledujúci krok. Z rovnice Kalman Gain alebo výpočet kalmanového zisku vyplýva, že ak je šum z merania R veľké, nebudeme dávať veľkú váhu meraniu pri výpočte ďalšieho kroku. Naopak ak je šum merania R malé, priradíme meranej hodnote veľkú váhu pri dalšom kroku.  
 
 
 \chapter{Závěr}
