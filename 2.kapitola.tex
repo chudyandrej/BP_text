@@ -1,18 +1,3 @@
-%=========================================================================
-% (c) Michal Bidlo, Bohuslav Křena, 2008
-
-\chapter{Úvod}
-Počítačové videnie zažíva v dnešnej dobe obrovský rozmach. Môžeme ho vidieť všade okolo nás. Skenovanie ŠPZ na parkoviskách a dialniciach,  riadenie dopravy, rozpoznávanie tváre a iné. Tento fenomén je spôsobený tým, že počítače dnešnej doby majú obrovský výkon a preto dokážu spracovať obrovské množstvo dát, ktoré sa z kamier dostávajú do počítača prakticky v reálnom čase. Ďalším dôvodom je fakt, že video z kamery sa ľudskému vnímaniu reality približuje najviac z pomedzi všetkých iných. 
-	
-V úvode práce je popísaný princíp fungovania bežnej web kamery a rôzne technológie snímania hĺbkových senzorov. V tejto kapitole sa práca zameriava aj na konkurenčné systémy, ktoré riešia podobnú tematiku.
-
-\section{Existujúce riešenia}
-Problematikou počítanie (detekovania) prechodov ľudí sa zaoberá celá rada aplikácii.  
-Jedna z najprimitívnejších je IR závora, ktorú bežne môžeme nájsť na hocijakej garážovej bráne. Je založená na princípe vysielača a prijímača. Vysielač vysiela infračervený lúč a keď niekto prejde, lúč sa zatieni a rele v prijímači sa zopne. Táto technológia má však veľmi veľa problémov a obmedzení. Najväčšim obmedzením je, že môže byť inštalovaná len v zúžených priestoroch, kde môže v jednom okamihu prechádzať len jeden človek. Toto tvrdenie sa opiera o fakt, že ak by išli dvaja alebo viacerí ľudia vedľa seba pre tento senzor to stále znamená len jedno zopnutie a teda jeden človek.
-Ďalšia asi najúspešnejšia a najpredávanejšia aplikácia je od firmy iriSys. Na počítanie ľudí využívajú termálne kamery. Toto riešenie je veľmi podobné riešeniu, ktoré bude ďalej opisovať táto práca. Výrobca uvádza, že ich produkt má 98\% spoľahlivosť. Avšak cena za najlacnejší model sa pohybuje okolo 1000eur za kus čo je nemalá suma. Ďalšou podstatnou nevýhodou je fakt, že človek môže mať na sebe veľkú vrstvu oblečenia, čo môže spôsobiť neviditeľnosť takého človeka pre systém. Problém môže nastať aj v prostredí, kde je okolitá teplota veľmi podobná ľudskému telu alebo sa v priestore pohybujú aj iné objekty, zanechávajúce tepelnú stopu.
-Ostatné riešenia sa poväčšine opierajú o technológiu obyčajnej kamery. Tento prístup je veľmi lacný, lebo kamera nemusí byť ničím výnimočná dokonca množstvo objektov má kamery už  predom inštalované. Postupom času rôzni výrobcovia, začali dokonca implementovať takéto technológie do firmwarov kamier za pomoci hardvérovej akcelerácie. Dokážu počítať ľudí, spustiť alarm pri narušení virtuálnej zóny či čítať ŠPZ áut. Pri testoch som však zistil, že presnosť takýchto služieb zo strany kamerových spoločností je skôr podpriemerná. 
-
-
 \chapter{Počítačové videnie}
 \section{Úvod}
 Počítačové videnie je vedná disciplína, ktorá sa snaží počítačovými prostriedkami napodobniť ľudské videnie. Základom je spracovanie 2D obrazu (Image Processing). Túto etapu väčšinou predstavujú algoritmy na nízkej úrovni abstrakcie (low-level). Algoritmy, ktoré extrahujú z nižšej úrovne znalosti, dávajú ich do súvislostí a snažia sa im porozumieť (Image understanding, machine learning) pracujú na vyššej úrovni (hight-level). To by nebolo možné bez znalosti fyzikálnej podstaty senzorov, optiky, okolitého prostredia a tiež matematických a štatistických metód na ich hodnotenie.
@@ -262,9 +247,3 @@ Všetky tieto predpoklady spĺňa práve Kalmanov filter, avšak je možné ho p
 
 
 Hrubý odhad je predchádzajúci odhad polohy pred aktualizáciou merania. V časti aktualizácia merania už naozaj odhadneme nasledujúci krok. Z rovnice Kalman Gain alebo výpočet kalmanového zisku vyplýva, že ak je šum z merania R veľké, nebudeme dávať veľkú váhu meraniu pri výpočte ďalšieho kroku. Naopak ak je šum merania R malé, priradíme meranej hodnote veľkú váhu pri dalšom kroku.  
-
-
-\chapter{Závěr}
-Závěrečná kapitola obsahuje zhodnocení dosažených výsledků se zvlášť vyznačeným vlastním přínosem studenta. Povinně se zde objeví i zhodnocení z pohledu dalšího vývoje projektu, student uvede náměty vycházející ze zkušeností s řešeným projektem a uvede rovněž návaznosti na právě dokončené projekty.
-
-%=========================================================================

@@ -1,0 +1,18 @@
+%=========================================================================
+% (c) Michal Bidlo, Bohuslav Křena, 2008
+
+\chapter{Úvod}
+Počítačové videnie zažíva v dnešnej dobe obrovský rozmach. Môžeme ho vidieť všade okolo nás. Skenovanie ŠPZ na parkoviskách a dialniciach,  riadenie dopravy, rozpoznávanie tváre a iné. Tento fenomén je spôsobený tým, že počítače dnešnej doby majú obrovský výkon a preto dokážu spracovať obrovské množstvo dát, ktoré sa z kamier dostávajú do počítača prakticky v reálnom čase. Ďalším dôvodom je fakt, že video z kamery sa ľudskému vnímaniu reality približuje najviac z pomedzi všetkých iných. 
+	
+V úvode práce je popísaný princíp fungovania bežnej web kamery a rôzne technológie snímania hĺbkových senzorov. V tejto kapitole sa práca zameriava aj na konkurenčné systémy, ktoré riešia podobnú tematiku.
+
+\section{Existujúce riešenia}
+Problematikou počítanie (detekovania) prechodov ľudí sa zaoberá celá rada aplikácii.  
+Jedna z najprimitívnejších je IR závora, ktorú bežne môžeme nájsť na hocijakej garážovej bráne. Je založená na princípe vysielača a prijímača. Vysielač vysiela infračervený lúč a keď niekto prejde, lúč sa zatieni a rele v prijímači sa zopne. Táto technológia má však veľmi veľa problémov a obmedzení. Najväčšim obmedzením je, že môže byť inštalovaná len v zúžených priestoroch, kde môže v jednom okamihu prechádzať len jeden človek. Toto tvrdenie sa opiera o fakt, že ak by išli dvaja alebo viacerí ľudia vedľa seba pre tento senzor to stále znamená len jedno zopnutie a teda jeden človek.
+Ďalšia asi najúspešnejšia a najpredávanejšia aplikácia je od firmy iriSys. Na počítanie ľudí využívajú termálne kamery. Toto riešenie je veľmi podobné riešeniu, ktoré bude ďalej opisovať táto práca. Výrobca uvádza, že ich produkt má 98\% spoľahlivosť. Avšak cena za najlacnejší model sa pohybuje okolo 1000eur za kus čo je nemalá suma. Ďalšou podstatnou nevýhodou je fakt, že človek môže mať na sebe veľkú vrstvu oblečenia, čo môže spôsobiť neviditeľnosť takého človeka pre systém. Problém môže nastať aj v prostredí, kde je okolitá teplota veľmi podobná ľudskému telu alebo sa v priestore pohybujú aj iné objekty, zanechávajúce tepelnú stopu.
+Ostatné riešenia sa poväčšine opierajú o technológiu obyčajnej kamery. Tento prístup je veľmi lacný, lebo kamera nemusí byť ničím výnimočná dokonca množstvo objektov má kamery už  predom inštalované. Postupom času rôzni výrobcovia, začali dokonca implementovať takéto technológie do firmwarov kamier za pomoci hardvérovej akcelerácie. Dokážu počítať ľudí, spustiť alarm pri narušení virtuálnej zóny či čítať ŠPZ áut. Pri testoch som však zistil, že presnosť takýchto služieb zo strany kamerových spoločností je skôr podpriemerná. 
+
+
+
+
+
