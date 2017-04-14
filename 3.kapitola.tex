@@ -1,0 +1,60 @@
+\chapter{Návrh riešenia problému}
+\section{Existujúce problémy}
+Pred zahájením tvorby aplikácie je nutné oboznámiť sa s problémami, ktoré je nutné aby aplikácia riešila. Na prvý pohľad  sa môže zdať, že  počítanie ľudí je jednoduchý proces. Predpokladajme, že virtuálna brána je umiestnená pri vstupe do miestnosti. Proces prechodu osoby znamená zvýšenie počítadla prechodov osôb a na základe smeru danej osoby dekrementovať alebo inkrementovať počet osob nachádzajúcich sa v miestnosti. Systém musí byť navrhnutý tak, aby bol schopný detekovať a sledovať aj viacero ľudí ktorý v jedenom okamihu prechádzajú cez virtuálnu bránu rovnakým alebo odlišným smerom.  Jeden z najväčších problémov je však dynamickosť prostredia, kde by aplikácia mala byť nasadená. Rýchle svetelné zmeny okolia,  nepredvídateľné pohyby ľudí na scéne (môže zastať, dotýkať sa, ťahať / tlačiť iný objekt)  toto všetko je nutné riešiť, tak aby aplikácia dosiahla čo najväčšej presnosti. 
+
+\section{Konceptuálny návrh systému}
+Z problémov opísaných v sekcii 3.1 je jasné, že jednoduché systémy typu Infračervená závora, nebudú mať dostatočne veľkú presnosť vzhľadom na prechody viacerých osôb v jednom časovom okamihu. Je nutné oprieť sa o metódy, ktoré vedia zaznamenať viac informácii o objekte, ktorý prechádza vymedzeným priestorom (tvar, rýchlosť, veľkosť, smer, atd …). 
+
+Jedným z najkomplexnejších prostriedkov, ako dostať dáta do počítača na spracovanie je kamera, ktorá nám poslúži ako senzor.  Umiestnime ju na vrchnú priečku prechodu tak, aby snímala osoby z vrchu. Táto pozícia je najlepšia, lebo eliminuje možnosti zatienenia sledovaného objektu iným objektom na scéne.  
+
+\begin{figure}[H]
+  \centering
+  \begin{minipage}[b]{0.2\textwidth}
+    \includegraphics[width=\textwidth]{obrazky/konceptSnimania}
+    \caption{Poloha kamery.}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.5\textwidth}
+    \includegraphics[width=\textwidth]{obrazky/pohladZhora}
+    \caption{Obraz snímanej scény}
+  \end{minipage}
+\end{figure}
+
+\section{Výber snezora (kamery)}
+Výber vhodného snímača priestoru virtuálnej brány je veľmi dôležitý. Ak senzor bude snímať dáta, ktoré sú enormne zaťažené šumom, realizácia funkčného algoritmu bude veľmi náročná, v niektorý prípadoch až nemožná. Táto práca sa zameriava na dva typy vhodných kamier \textbf{3D kamery} a\textbf{ 2D  RGB kamery}.
+
+\subsection{3D kamery}
+Keďže  koncept snímania priestoru sa opiera o snímanie z výšky, veľmi silným kandidátom sú aktívne 3D kamery. Veľká výhoda je meranie na základe tvorby hĺbkového obrazu(kapitola XXX). Vďaka tomu, má meranie vysokú presnosť, nepotrebuje osvetlenie priestoru ani kontrastné prostredie.  Ďalšou veľkou výhodov je informácia o výške osoby, ktorá prechádza. Táto informácie je použiteľná v mnohých aspektoch ďalšieho spracovania. Na druhej strane technológia aktívneho 3D hĺbkomera je náchylná na priame slnečné lúče. Tie dokážu merania veľmi znehodnotiť. Vo svojej práci som otestoval tri rôzne aktívne hĺbkomery: 
+
+\begin{itemize}
+\item Kinect 360
+\item Intel RealSence SR300
+\item Orbbec Astra S
+\end{itemize}
+
+\subsubsection{Testovanie}
+Testovanie spočívalo v umiestnení všetkých troch kamier na vhodné miesto, kde sa nahrával záznam po dobu 10 minút. Vďaka tomu je zaručené, že všetky tri kamery boli vystavené rovnakému prostrediu a boli nahrávané za rovnakých svetelných podmienok.  Počas nahrávania bol udržiavaný konštantný pohyb osôb cez bránu. Pre ohodnotenie kvality jednotlivých záznamov bola použitá \textbf{metrika hodnotenia} založená na priemernom počte nenameraných pixelov na jednom snímku. Nenameraný pixel znamená, že sa nachádza nekonečne ďaleko alebo ide o chybu merania spôsobená tvarom objektu (ostrá hrana), slnečným žiarením, materialom oklitého prostredia alebo iné. \textit{Metóda pre výpočet hodnotiacej metriky konverguje k objektívnemu výsledku len vtedy, ak každý objekt scény sa nachádza v zornom poli kamery, ktoré udáva jej výrobca.}  
+
+\subsubsection{Kinect 360}
+Vnímanie 3D okolitého sveta je dosiahnuté za pomoci hĺbkových senzorov a RGB kamery. Kombináciou týchto technológií je možné získať RGBD obraz s rozlíšením 640 x 480 pixlov.  Kinect sníma frekvenciou 30 Hz. Hĺbka je snímaná s presnosťou na 11 bitov, čiže hĺbka jedného pixela môže nadobudnúť hodnoty od 0 do 2047.  Pracovný rozsah senzora je  1,2 - 3,5 metra.  Využíva technológiu vyvinutú firmou PrimaSence.  V ľavej časti senzora sa nachádza IR projektor s vlnovou dĺžkou svetla 830nm. Generátor kóduje informáciu do svetelných vzorov, ktoré sa odrazom od predmetov pred senzorom deformujú.  Odraz IR svetla je zachytený senzorom v pravej časti senzora a z veľkosti deformácii je vypočítaná hĺbková mapa. Senzor používa USB rozhranie, avšak potrebuje aj prídavné napájanie, kvôli veľkému odberu.
+
+Senzor bol testovaný s využitím ovládača fteenect, čo je openSource projekt vývýjaný komunitou.
+
+
+
+
+
+
+
+
+%rozpísať informácie o použitých kamerách 
+%porovnanie kamier za zvolenej mertiky snímania 
+
+
+%implementácia algoritmu pre hĺbkové kamery 
+%implementácia algoritmu pre RGB kamery
+
+%zhodnitiť úspešnosť algoritmov a celého prístupu 
+%potencial aplikácie do budúcna
+
+

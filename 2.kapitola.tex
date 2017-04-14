@@ -5,18 +5,23 @@ Počítačové videnie je vedná disciplína, ktorá sa snaží počítačovými
 \section{Najvýznamnejšie problémy počítačového videnia}
 \begin{itemize}
 \item Strata informácie pri premietaní z 3D do 2D. Človek totiž vníma okolitý svet ako 3-rozmerný, väčšina senzorov však snímacích zariadení je schopná registrovať iba 2D
-\item Iterpretácia ľudského mozgu nieje správna. Sietnica ľudského oka je dvojrozmerná preto trojrozmernú prestavu okolia vytvára mozog, na základe znalostí
-\item Šum. Je prítomný v kažom reálnom obraze. Preto namiesto deterministických modelov je potrebné používať stochastické modely, ktoré predpokladajú určitý stupeň neurčitosti a dokážu túto neurčitosť aj zahrnúť do matematického modelu
-\item Obrovsksý tok dát prímaný zo snímačov obrazu, ktoré je nutné spracovať v reálnom čase
+\item Interpretácia ľudského mozgu nieje správna. Sietnica ľudského oka je dvojrozmerná preto trojrozmernú predstavou okolia vytvára mozog, na základe znalostí
+\item Šum. Je prítomný v každom reálnom obraze. Preto namiesto deterministických modelov je potrebné používať stochastické modely, ktoré predpokladajú určitý stupeň neurčitosti a dokážu túto neurčitosť aj zahrnúť do matematického modelu
+\item Obrovský tok dát prijímaný zo snímačov obrazu, ktoré je nutné spracovať v reálnom čase
 \item Nejednoznačná interpretácia jasu jednotlivých častí objektu. Bez poznania fyzikálnej povahy sledovaného objektu nie sme schopní jednoznačne určiť či výrazne svetlé škvrny na obraze sú dôsledkom extrémne svetlých častí objektu alebo iba dôsledkom odrazu zdroja svetla v lesklej (ale nie svetlej) časti povrchu
 \end{itemize}
 
 
 \section{Etapy spracovania obrazu}
 
-Jednotlivé etapy možno vyjadriť nasledovne
+Jednotlivé etapy spracovávania obrazu možno vyjadriť grafom, ktorý znázornuje postupnosť jednotlivých krokov v závislosti na množstve dát a veľkosti abstrakcie v jednotlivých krokoch. 
 
-OBRAZOK!!!!!!
+\begin{figure}[H]
+\begin{center}
+	\includegraphics[scale=0.45]{obrazky/etapy}
+	\caption{Etapy spracovania obrazu}
+	\end{center}
+\end{figure}
 
 V nasledujúcom texte si postupne opíšeme každú fázu modelu. 
 
@@ -27,10 +32,14 @@ Základným obmedzením pri vnímani okolitého 3D sveta je skutočnosť, že č
 
 \subsubsection{Dierková komora} je to model kamery možno použiť ako prvú aproximáciu mapovania 3D scény do 2D obrazu. Je to analógia toho čo vzniká na sietnici ľudského oka. Obraz sa premieta do obrazovej roviny vzdialenej od dierky o ohniskovú vzialenosť f. V prípade, že sa zrkadlová rovina presunie pred rovinu projekcie z podobnosti trojuholníkov vyplýva tento vzorec:
 
+\begin{figure}[H]
+\begin{left}
+	\includegraphics[scale=0.4]{obrazky/dierkovaKamera}
+	\caption{Vyvolanie a prebeh zmeny stavu v komponente}
+	\end{left}
+\end{figure}
 
-
-OBRAZOK Vzorec
-
+$$\textit{x}=\frac{X\textit{f}}{Z}$$
 
 Tento výraz predstavuje najjednoduchší model dierkovej kamery, ktorý je základom zložitejších modelov slúžiacich na výpočty napr. pri 3D projekcii. 
 
@@ -40,9 +49,7 @@ Je proces transformácie fyzikálneho obrazu do podoby vhodne pre spracovanie za
 \item \textbf{Snímanie} (scaning) - Cieľom prvého kroku je prevod optických veličín na elektrické. Pri použití nekvalitného snímača sa na výstupe objavý veľké množsto šumu, ktoré len ťažko možno korigovať. Preto je nutné dbať na zaistenie čo najväčšej kvality snímača. 
 
 \item \textbf{Vzorkovanie} - Shanonova veta i vzorkovaní nám vraví, že vzorkovacia frekvencia musí byť aspoň 2x väčšia než je maximálna frekvencia, ktorú obsahuje vzorkovací signál.
-
-OBRAYOK !!!
-
+$$\textit{f}_{\textit{vzor}} \ge {2} \textit{f}_{\textit{max}}$$
 
 V obrazovej terminológii nám táto veta vraví, že interval vzorkovania musí byť menší alebo rovný polovici rozmerov najmenších detailnou na obraze. 
 
@@ -86,14 +93,22 @@ osvetlenia systematická, vieme korigovať odchýlku každého bodu od ideálnej
 \subsubsection{Geometrické transformácie}
 Geometrická kransformácia 2D obrazu je vekorová transformácia T, ktorá zobrazí bod (x,y) do bodu (x0, y0).  Jedná sa teda o transformáciu súradníc bodov obrazu. Vďaka tomu môžeme odstrániť geometrické skreslenie vzniknuté pri snímaní obrazu (napr. korekcie geometrických porúch objektívu kamery, oprava skreslenia družicového snímku spôsobená zakrivením zemegule).  Z toho vyplýva, že pomocou referenčnej mriežky vieme vyrovnať geometricky deformovaný obraz. Transformačné rovnice môžu byť známe alebo odvodené na základe vstupného a transformačného  obrazu. Pred začiatko transformácie sa musia nájsť dvojice zodpovedajúcich si bodov (lícovacie body), ktoré sa na obrázkoch ľahko hľadajú napr. priesečníky vláknitých štruktúr, rohy objektov a pod. Následne sa vykoná transformácia súradníc bodov do nových pozícii. A nakoniec sa musí vykonať aproximácia jasovej funkcie.
 
+\begin{figure}[H]
+\begin{center}
+	\includegraphics[scale=0.4]{obrazky/geometrickaTransformacia}
+	\caption{Príklad geometrickej transformácie}
+	\end{center}
+\end{figure}
+
 \subsubsection{Lokálne predspracovanie - filtrácia}
 Používa sa na odstránenie vysokofrekvenčných zložiek, čo predstavujú hrany a šum. Pri tejto operácii dochádza k stratení detajlov obrazu (rozmazanie).
 
 \textit{Spriemerovanie} - Ide o najjednoduchší prostriedok pre vyhladenie šumu v obraze. Pre každý bod obrazu sa jeoho jas nahradí aritmetickým priemerov jasov jeho susedov. Filtrácia priemerovaním je vlastne špecialny prípad konvolúcie, kde konvolučná maska vyzerá nasledovne:
-
+$$\textit{h}=\frac{1}{9}\begin{bmatrix} 1 & 1 & 1 \\ 1 & 1 & 1 \\ 1 & 1 & 1  \end{bmatrix}$$
 
 \textit{Filtrovanie pomocou Gaussovej masky} - Galusovú masku dostaneme posilnením stredového bodu prípadne jeho štiroch susedov tak aby lepšie aproximoval šum s galussovým rozdelením.
-
+$$\textit{h}=\frac{1}{10}\begin{bmatrix} 1 & 1 & 1 \\ 1 & 2 & 1 \\ 1 & 1 & 1  \end{bmatrix}$$
+$$\textit{h}=\frac{1}{16}\begin{bmatrix} 1 & 2 & 1 \\ 2 & 4 & 2 \\ 1 & 2 & 1  \end{bmatrix}$$
 
 \textit{Mediánový filter} - Medián alebo prostredná hodnota je hodnota, ktorá rozdeľuje postupnosť podľa veľkosti zoradených výsledkov na dve rovnako početné polovice. V štatistike patrí medzi stredné hodnoty. Usporiadame jasové úrovne z lokálneho okolia a vyberieme strednú hodnotu usporiadania. To zabráni, aby krajné extrémy ovplyvnili vybranú hodnotu. Filtŕacia však nieje vhdná v obraze kde sa nachádzajú tenké čiary a ostré rohy. 
 
@@ -101,11 +116,18 @@ Používa sa na odstránenie vysokofrekvenčných zložiek, čo predstavujú hra
 \subsubsection{Lokálne predspracovanie - Detekcia hrán}
 Opak filtrácie, zvyšuje vysokofrekvenčné časti spektra (hrán) a odstránenie nízkofrekvenčných častí. Sprievodný javom je aj zvýraznenie šumu v obraze.  Hrana je vektorová veličina určená veľkostnou a smerom. Pri hranovej detekcii sa využíva vlastnosť gradientu, že hodnota gradientu funkcie dvoch premenných je v oblasti hrany najväčšia. 
 
-\textit{Laplacov operátor} - Tento operátor aproximuje druhú deriváciu a predstavuje rýchlosť zmeny hodnôt jasu. Prejaví sa najmä na strmých alebo izolovaných hranách alebo ju možno použiť na detekciu izolovaných bodov- bude zvýrazňovať aj šum
+\textit{Laplacov operátor} - Tento operátor aproximuje druhú deriváciu a predstavuje rýchlosť zmeny hodnôt jasu. Prejaví sa najmä na strmých alebo izolovaných hranách alebo ju možno použiť na detekciu izolovaných bodov. Bude zvýrazňovať aj šum. Spolu s Laplaceovým operátorom sa používa i vyhladzovací Gaussovnský filter. Vtedy hovoríme o Laplaciáne Gaussiánu – LoG (matica h).
+$$\textit{h}_1=\begin{bmatrix} 1 & 2 & 1 \\ 0 & 0 & 0 \\ -1 & -2 & -1  \end{bmatrix}$$
+$$\textit{h}_2=\begin{bmatrix} 0 & 1 & 2 \\ -1 & 0 & 1 \\ -2 & -1 & 0  \end{bmatrix}$$
+\textit{Sobelov operátor} - Aproximuje prvé parcialne derivácie. Nakoľko samotná derivácia zvýrazňuje šum, vykonáva ja vyhladzovanie. Pre každý smer hrán existuje špeciálna maska.
 
 
-Spolu s Laplaceovým operátorom sa používa i vyhladzovací Gaussovnský filter. Vtedy hovoríme o Laplaciáne Gaussiánu – LoG (matica h).
-Sobelov operátor aproximuje prvé parcialne derivácie. Nakoľko samotná derivácia zvýrazňuje šum, vykonáva ja vyhladzovanie. Pre každý smer hrán existuje špeciálna maska.
+\begin{figure}[H]
+\begin{center}
+	\includegraphics[scale=0.16]{obrazky/hranove_filtre}
+	\caption{Vzájomné porovnanie algoritmou pre detekciu hrán}
+	\end{center}
+\end{figure}
 
 
 \subsection{Segmentácia obrazu}
@@ -120,7 +142,8 @@ Segmentácia je rozdelenie obrázku na časti ktoré silne korelujú s objektami
 
 \subsubsection{Prahovanie}
 Najjednoduchšia segmentačná technika. Je založená na predpoklade, že jednotlivé objekty majú konštantnú obrazivosť či pohltivosť svetla na svojom povrchu. Je to transformácia, ktorá zobrazuje vstupný obraz f(i, j) na výstupný obraz g(i, j) nasledovne: 
-
+$$g (i{,}j)=1 {,}\quad {ak} f(i{,}j)\ge T$$
+$$g (i{,}j)=0 {,}\quad {ak} f(i{,}j)  < T$$
 
 
 Z toho vyplýva, že na segmentovanie objektov od pozadia sa používa jasová konštanta, ktorá sa nazýva prah. 
@@ -128,16 +151,33 @@ Z toho vyplýva, že na segmentovanie objektov od pozadia sa používa jasová k
 
 \textit{Globálne prahovanie} - Je to technika ktorá je vhodná, keď sa objekty na scéne diametrálne líšia svojimi charakteristikami. V takom prípade môžeme nastaviť prah ako interval platných hodnôt. Príklad použitia môžeme vidieť na obrázku s kačkou. Originálny obrázok sa konvertuje do HSV farebného priestoru, ktorý umožňuje lepšiu prácu s odtieňmi farieb spôsobené nehomogénnym osvetlením. Následne sa aplikuje filter ktorý prepustí len hodnoty v danom intervale.
 
+\begin{figure}[H]
+\begin{center}
+	\includegraphics[scale=0.25]{obrazky/prahovanie}
+	\caption{Detekcia tela kačky na základe prahovania}
+	\end{center}
+\end{figure}
+
+
 \textit{Lokálne prahovanie} - Málokedy je možné použiť jednu hodnotu prahu (alebo interval) na celý obraz, z dôvodu fyzikálnym podobnostiam objektov v scéne a  nehomogénnemu osvetleniu scény. Preto sa často používajú etódy lokálneho prahovania. Algoritmi sa počítajú v malých regiónoch obrazu. Tak dostaneme rôzne prahové hodnoty pre rôzne regióny rovnakého obrazu a to nám dáva lepšie výsledky u snímok s rôznym osvetlením. Môžeme ho definovať takto : 
+$$T=T(f {,} f_c){,}$$
+
+kde $f_c$ je časť obrazu v ktorej sa určuje prah. 
+
+\begin{figure}[H]
+\begin{center}
+	\includegraphics[scale=0.15]{obrazky/lokalne_prahovanie}
+	\caption{Porovnanie výsledkov metod lokalneho prahovania}
+	\end{center}
+\end{figure}
 
 
-kde fc je časť obrazu v ktorej sa určuje prah. 
 
 \subsubsection{Segmentácia na základe detekcie hrán}
-Techniky založené na informáciach, ktoré poskytujú hrany v obraze. Preto je  nutné si vysvetliť aký rozdiel je medzi pojmom hrana a hranica. Hrana je miesto kde sa skokovito mení hodnota obrazovej funkcie. Pre účely segmentácie sú však dôležitejšie hranice regiónov.  Region je množina súvislých bodov a hranicu regiónu je množinu bodov, ktoré sú súčasťov regiónu, ale zároveň aspoň jeden z ich susedov nepatri regiónu. Takáto hranica tvorí vnútornú hranicu regiónu. 
+Techniky založené na informáciach, ktoré poskytujú hrany v obraze. Preto je  nutné si vysvetliť aký rozdiel je medzi pojmom hrana a hranica. Hrana je miesto kde sa skokovito mení hodnota obrazovej funkcie. Pre účely segmentácie sú však dôležitejšie hranice regiónov.  Región je množina súvislých bodov a hranicu regiónu je množinu bodov, ktoré sú súčasťou regiónu, ale zároveň aspoň jeden z ich susedov nepatri regiónu. Takáto hranica tvorí vnútornú hranicu regiónu. 
 
 \textbf{Metóda sledovania hranice}
-Táto metóda pracuje na binárnom obraze. Vnútornú hranicu získame tak, že  prehľadávame obraz zľava do prava, zhora dole, pokiaľ nenarazíme na bod patriaci regiónu. Tento bod pridáme do hranice. Nasledovne prehľadávame okolie tohoto bodu v protismere hodinových ručičiek od posledne navštíveného bodu. Pokiaľ narazíme na bod, ktorý je patriaci do rovnakého regionu, pridáme ho do hranice. Tento postup opakujeme dokiaľ sa nedostaneme naspäť k počiatočnému bodu. 
+Táto metóda pracuje na binárnom obraze. Vnútornú hranicu získame tak, že  prehľadávame obraz zľava doprava, zhora dole, pokiaľ nenarazíme na bod patriaci regiónu. Tento bod pridáme do hranice. Nasledovne prehľadávame okolie tohoto bodu v protismere hodinových ručičiek od posledne navštíveného bodu. Pokiaľ narazíme na bod, ktorý je patriaci do rovnakého regiónu, pridáme ho do hranice. Tento postup opakujeme dokiaľ sa nedostaneme naspäť k počiatočnému bodu. 
 
 Algoritmus nájde iba vnútorne hranice. Pokiaľ chcem nájsť vonkajšie hranice, môžeme ich získať tak že, nájdeme vnútorné. Potom vonkajšiu hranicu tvoria body, ktoré sme pri vyhľadávaní vnútornej hranice testovali, ale nepatrili do regiónu. 
 
@@ -146,23 +186,23 @@ Tento algoritmus funguje pre oblasti väčšie než 1 pixel.  Ide o veľmi obľ�
 \textbf{Cannyho detektor}
 Jeden z najlepších a najpoužívanejších algoritmov pre detekciu hrán, ktorý je založený na hľadaní hodnoty gradientu a spoľahlivosti bodu na základe susedných bodoch. Požiadavky na úspešnosť sú presnosť, minimálny počet chýb a jednoznačnosť. 
 
-Prvý krok algoritmu je eliminácia šumu použitím \textit{Gaussovho filtra}.  Následne nájdeme miesto a smer gradientu použitím \textit{Sobelového operátora}. Ďalej musíme odobrať z hodnôt gradientu  body, ktoré nie sú lokálne maximá. Napríklad, ak máme pixel, ktorým prechádza zvislá hrana, musí byť jeho ľavý a pravý sused nižšej hodnoty, aby bol uznaný  ako skutočná hrana. V poslednom kroku musíme uplatniť metódu \textit{prahovania s hysteréziou}. Zvolíme si minimálny (T1) a maximálny (T2) prah medzi ktorým môže gradient kolísať.  Ak je hodnota gradientu pixelu vyššia než T2 je pixel označený ako hranový. Ak hodnota bodu leží medzi T1 a T2 bod je uznaný ako hranový len vtedy, ak leží vedľa suseda označeného ako hranový.
+Prvý krok algoritmu je eliminácia šumu použitím \textit{Gaussovho filtra}.  Následne nájdeme miesto a smer gradientu použitím \textit{Sobelového operátora}. Ďalej musíme odobrať z hodnôt gradientu  body, ktoré nie sú lokálne maximá. Napríklad, ak máme pixel, ktorým prechádza zvislá hrana, musí byť jeho ľavý a pravý sused nižšej hodnoty, aby bol uznaný  ako skutočná hrana. V poslednom kroku musíme uplatniť metódu \textit{prahovania s hysteréziou}. Zvolíme si minimálny (T1) a maximálny (T2) prah medzi ktorým môže gradient kolísať.  Ak je hodnota gradientu pixlu vyššia než T2 je pixel označený ako hranový. Ak hodnota bodu leží medzi T1 a T2 bod je uznaný ako hranový len vtedy, ak leží vedľa suseda označeného ako hranový.
 
 
-\textbf{Hľadanie hráníc Houghovou transformáciou}
-Pomocou tejto metódy je možné nájsť v obraze objekt, ktorého tvar je možné popísať analytickým výrazom (priamka, kruh, elipsa …). Veľkou výhodov je invariantnosť metódy na zmenu mierky, pootočenie a veľká odolnosť voči pôsobeniu šumu v obraze. 
+\textbf{Hľadanie hraníc Houghovou transformáciou}
+Pomocou tejto metódy je možné nájsť v obraze objekt, ktorého tvar je možné popísať analytickým výrazom (priamka, kruh, elipsa …). Veľkou výhodou je invariantnosť metódy na zmenu mierky, pootočenie a veľká odolnosť voči pôsobeniu šumu v obraze. 
 
 \subsubsection{Segmentácia založená na spájaní a delení oblastí}
 Metódy tejto kategórie nehľadajú hranice jednotlivých regiónov ale snažia sa o nájdenie oblastí priamo. Hlavná myšlienka je založená na klasifikácii obrazu do niekoľkých spojitých homogénnych podoblastí,  ktoré sú vzájomne disjunktné, pričom zjednotením podoblastí je celý obraz.
-
+$$R=\bigcup_{i=1}^s R_i{,}\quad R_i\bigcap R_j=0{,}\quad{pre}\quad i\neq j$$
 
 Medzi základné podmienky segmentácie patrí kritérium homogenity:
 
 
-kde S je celkový počet regiónov v obraze a H(Ri) je hodnota binárne homogenity regiónu Ri. Prvá podmienka sa týka vlastností, ktoré musia spĺňať pixely v segmentovanom regióne, druhá určuje, že susedné regióny Ri a Rj majú odlišné veľkosti. Existuje veľké množstvo metód založené na segmentácii regiónov, pričom sa z výkonnostného hľadiska veľmi nelíšia. Veľkov výhodov metód tejto kategórie je odolnosť voči šumu, preto v prípadoch veľkého zašumenia obrazu sú lepšou cestou oproti metódam založených na detekcii hrán avšak na úkor väčšej výpočetnej  náročnosti.  
+kde S je celkový počet regiónov v obraze a H(Ri) je hodnota binárne homogenity regiónu Ri. Prvá podmienka sa týka vlastností, ktoré musia spĺňať pixle v segmentovanom regióne, druhá určuje, že susedné regióny $R_i$ a $R_j$ majú odlišné veľkosti. Existuje veľké množstvo metód založené na segmentácii regiónov, pričom sa z výkonnostného hľadiska veľmi nelíšia. Veľkou výhodou metód tejto kategórie je odolnosť voči šumu, preto v prípadoch veľkého zašumenia obrazu sú lepšou cestou oproti metódam založených na detekcii hrán avšak na úkor väčšej výpočtovej náročnosti.  
 
 \subsection{Príznaky a rozpoznávanie}
-Proces segmentácie zaručuje, že obraz bol rozdelený do vzájomne disjunktných častí. To však vo väčšine prípadov nestačí a je nutné rozdeliť jednotlivé regióny tak, aby korelovaly s objektami reálneho sveta. To si však vyžaduje vytvoriť exaktný popis oblastí. Až na základe neho môže klasifikátor rozdeliť jednotlivé objekty do tried.  Z toho vyplýva, že proces segmentácie bezprostredne predchádza procesu klasifikácie.  Tento proces však nieje vždy nutný. Ak je cieľom odlíšenie objektov od pozadia výsledkom takejto snahy je binárny obraz, kde objekty záujmu sú biele a nepodstatné okolie čierne.
+Proces segmentácie zaručuje, že obraz bol rozdelený do vzájomne disjunktných častí. To však vo väčšine prípadov nestačí a je nutné rozdeliť jednotlivé regióny tak, aby korelovali s objektami reálneho sveta. To si však vyžaduje vytvoriť exaktný popis oblastí. Až na základe neho môže klasifikátor rozdeliť jednotlivé objekty do tried.  Z toho vyplýva, že proces segmentácie bezprostredne predchádza procesu klasifikácie.  Tento proces však nieje vždy nutný. Ak je cieľom odlíšenie objektov od pozadia výsledkom takejto snahy je binárny obraz, kde objekty záujmu sú biele a nepodstatné okolie čierne.
 Rozpoznávanie je klasifikačná úloha. Existujú dve základné formy opisu objektu, podľa nich delíme aj metódy rozpoznávania na dve základné skupiny: 
 
 \begin{itemize}
@@ -171,7 +211,7 @@ Rozpoznávanie je klasifikačná úloha. Existujú dve základné formy opisu ob
 \end{itemize}
 
 \subsubsection{Skalárne deskriptory}
-Je to výsledok merania ktorý kvantifikuje nejakú vlastnosť. Medzi jednoduché skalarne deskriptory  patria napríklad veľkosť,  okrúhlosť, obvod dĺžka hlavnej osi, uhol hlavnej osi, tažisko,  projekcia, výška, šírka, výstrednosť, pozdĺžnosť, pravouhlosť, smer, nekompaktnosť, Feretov priemer a iné. 
+Je to výsledok merania ktorý kvantifikuje nejakú vlastnosť. Medzi jednoduché skalárne deskriptory  patria napríklad veľkosť,  okrúhlosť, obvod dĺžka hlavnej osi, uhol hlavnej osi, ťažisko,  projekcia, výška, šírka, výstrednosť, pozdĺžnosť, pravouhlosť, smer, nekompaktnosť, Feretov priemer a iné. 
 
 Tvarové invarianty. Sú to deskriptory tvaru objektu, ktoré sú invariantné k určitej triede transformácii.
 Často používané sú aj viacrozmerné skalárne deskriptory medzi ktoré patrí napríklad obraz, histogram alebo kombinácia skalárnych deskriptorov.
@@ -180,7 +220,7 @@ Tvarové invarianty. Sú to deskriptory tvaru objektu, ktoré sú invariantné k
 
 Jeho všeobecná definícia je takáto:
 
-Na základe momentov je možné vypočítať charakteristiky oblastí, ako napríklad tažisko takto: 
+Na základe momentov je možné vypočítať charakteristiky oblastí, ako napríklad ťažisko takto: 
 
 
 Následne je možné definovať centrálny moment, ktorý je invariantný voči posunu. 
@@ -190,8 +230,8 @@ Následne je možné definovať centrálny moment, ktorý je invariantný voči 
 Tieto metódy úzko súvisia s pojmom klasifikácia a ich základom sú štatistické postupy. Klasifikátor je nástroj, ktorý na základe príznakov zaradí objekty do tried. Funkcie, ktoré oddeľujú jednotlivé triedy sú diskriminačné funkcie. Pokiaľ ich vieme znázorniť ako priamku, ide o lineárne klasifikároty. Existujú tri typy klasifikátorov: 
 
 \begin{itemize}
-\item Deterministický  – Založený na diskriminačných funkciach, určitá vzorka je vždy zaradená do určitej triedy 
-\item Stochastický -  Založený na pravdepodobnosti, že klasifikátor zaradí niektorý z objektov do nesprávnej triedy (každe rozhodnutie nesie riziko chyby).  Napríklad Bazesov klasifikátor
+\item Deterministický  – Založený na diskriminačných funkciách, určitá vzorka je vždy zaradená do určitej triedy 
+\item Stochastický -  Založený na pravdepodobnosti, že klasifikátor zaradí niektorý z objektov do nesprávnej triedy (každé rozhodnutie nesie riziko chyby).  Napríklad Bazesov klasifikátor
 \item Heuristický - neurónové siete, k-najbližších susedov, logistická regresia, Support Vector  Machines (SVM), rozhodovacie stromy (Decision trees) 
 \end{itemize}
 
@@ -206,20 +246,33 @@ Základným princípom je projekcia lúčou odrazených od 3D objektov sveta na 
 \subsubsection{Pasívne metódy - stereo videnie}
 Tieto metódy potrebujú pre snímanie scény zisk z dvoch kamier zo vzájomne rôznou pozíciou a ľubovolným uhlom. 
 
+\begin{figure}[H]
+\begin{center}
+	\includegraphics[scale=0.5]{obrazky/poloha_kamier_3D}
+	\caption{Možnosti vzájomných polôch dvoch kamier}
+	\end{center}
+\end{figure}
+
 
 V nasledujúcom texte sa však obmedzíme na situáciu A. Obe kamery snímajú scénu bod rovnakým uhlom a zo známou vzdialenostnou medi nimi. Táto situácia je rovnaká ako v ľudskom videní, len namiesto očí pracujeme s kamerami. Táto metóda je založená na triangulácii čo je orientácia snímkovej dvojice. 
 
+\begin{figure}[H]
+\begin{center}
+	\includegraphics[scale=1.8]{obrazky/triangulacia}
+	\caption{Výpočet vzdialenosti na základe tirangulácie}
+	\end{center}
+\end{figure}
 
 podobnosti trojuholníkov potom platí:
 
 
- Z obrázka vyplýva, že pri známich veličinách f (ohnisková vzdialenosť) a d (vzdialenosť kamier od seba) vieme vypočítať pre každý pixel jeho hĺbku. Je to možné na základe disparity, čo je rozdiel medzi polohou bodu snímaného jednou kamerou oproti pozícii toho istého bodu snímaného druhov kamerou. Takže každý pixel scény pozorovanej dvoma kamerami má istú hodnotu disparity. Čim je vzdialenosť od kamier väčšia, tým je táto hodnota menšia a čím je vzdialenosť menšia hodnota disparity je väčšia. Implementácia je veľmi náročná. Vyžaduje si presné technické špecifikácie kamier a algoritmy  koré dokážu nájsť korešpondujúce body sú zložité. Najpoužívanejším je RANSAC. 
+Z obrázka vyplýva, že pri známych veličinách f (ohnisková vzdialenosť) a d (vzdialenosť kamier od seba) vieme vypočítať pre každý pixel jeho hĺbku. Je to možné na základe disparity, čo je rozdiel medzi polohou bodu snímaného jednou kamerou oproti pozícii toho istého bodu snímaného druhov kamerou. Takže každý pixel scény pozorovanej dvoma kamerami má istú hodnotu disparity. Čim je vzdialenosť od kamier väčšia, tým je táto hodnota menšia a čím je vzdialenosť menšia hodnota disparity je väčšia. Implementácia je veľmi náročná. Vyžaduje si presné technické špecifikácie kamier a algoritmy  ktoré dokážu nájsť korešpondujúce body sú zložité. Najpoužívanejším je RANSAC. 
 
 Pre kamery ktoré nie sú umiestnené v rektifikovanej  polohe sa používa epipolárna geometria. 
 
 
 \subsubsection{Postupné ostrenie obrazu }
-Pokiaľ máme k dispozícii kvalitnú kameru, ktorá dokáže selektívne zaostrovať na určitú vzdialenosť, vieme postupným procesom získať hĺbku každého pixelu, podľa momentu kedy bol správne zaostrený. To, či je obraz na určitom mieste zaostrený, je možné určiť pomocou rôznych lokálnych operátorov známych z detektorou hrán (kapitola xxx). 
+Pokiaľ máme k dispozícii kvalitnú kameru, ktorá dokáže selektívne zaostrovať na určitú vzdialenosť, vieme postupným procesom získať hĺbku každého pixlu, podľa momentu kedy bol správne zaostrený. To, či je obraz na určitom mieste zaostrený, je možné určiť pomocou rôznych lokálnych operátorov známych z detektorou hrán (kapitola xxx). 
 
 
 \subsubsection{Aktívna triangulácia }
@@ -228,22 +281,24 @@ Základným znakom je pridanie dodatočnej informácie do scény. Táto informá
 \subsection{Analýza pohybu }
 Väčšina aplikácii, ktoré rieši počítačové videnie spočíva v nájdení, rozpoznaní a následom sledovaní objektu, ktorý sa pohybuje po scéne. 
 
-Veľmi používaná je detekcia samotného pohybu. V tomto druhu aplikácii statická kamera sleduje určitú scénu a je cieľom zistiť nežiadaný pohyb na sledovanej scéne. Ide o veľmi jednoduché aplikácie implementované napríklad aj v bezpečnostných kamerách ako inteligentná spúšť nahrávania.  Algoritmy nemajú za úlohu riešiť smer ani trajektóriu pohybu, sú schopné len vyrátať o koľko sa zmenila scéna oproti referenčnej vzorke. Jedna z najpoužívanejších metód je diferenčná metóda. Detekcia lokalizácia a predikcia pohybujúceho sa predmetu oproti detekcii samotného pohybu tieto metódy mají  za úlohu zistiť aj trajektóriu a vyrátať predikciu ďalšej polohy objektu. Medzi najkomplikovanejšie situácie patria tie, pri ktorých sa naraz môže pohybovať kamera ja objekt súčasne.
+Veľmi používaná je detekcia samotného pohybu. V tomto druhu aplikácii statická kamera sleduje určitú scénu a je cieľom zistiť nežiadaný pohyb na sledovanej scéne. Ide o veľmi jednoduché aplikácie implementované napríklad aj v bezpečnostných kamerách ako inteligentná spúšť nahrávania.  Algoritmy nemajú za úlohu riešiť smer ani trajektóriu pohybu, sú schopné len vyrátať o koľko sa zmenila scéna oproti referenčnej vzorke. Jedna z najpoužívanejších metód je diferenčná metóda. Detekcia lokalizácia a predikcia pohybujúceho sa predmetu oproti detekcii samotného pohybu tieto metódy majú  za úlohu zistiť aj trajektóriu a vyrátať predikciu ďalšej polohy objektu. Medzi najkomplikovanejšie situácie patria tie, pri ktorých sa naraz môže pohybovať kamera ja objekt súčasne.
 
 \subsubsection{Kalmanov filter}
-Pri analýze pohybu objektu veľmi často dochádza k spájaniu, zatieňeniu či zmiznutiu sledovaného  objektu na obraze. Z toho dôvodu by sme potrebovali prostriedok, ktorý by spĺňal nasledovné podmienky: 
+Pri analýze pohybu objektu veľmi často dochádza k spájaniu, zatieneniu či zmiznutiu sledovaného  objektu na obraze. Z toho dôvodu by sme potrebovali prostriedok, ktorý by spĺňal nasledovné podmienky: 
 
 
 Očakávaná hodnota odhadu by mala byť rovná očakávanej hodnote stavu - Potrebujeme priemernú hodnotu odhadovaného stavu. Je nežiaduce aby odhadovaná hodnota bola posunutá nahor alebo nadol. 
-Chceme nájsť taký prostriedok pre odhad, ktorý má čo najmenšiu variaciu chyby - odhadovaná a následne nameraná hodnota by sa mala líšiť minimálne. 
+Chceme nájsť taký prostriedok pre odhad, ktorý má čo najmenšiu variáciu chyby - odhadovaná a následne nameraná hodnota by sa mala líšiť minimálne. 
 
 
 
-Všetky tieto predpoklady spĺňa práve Kalmanov filter, avšak je možné ho použiť len vtedy ak  meraný systém je opísateľný iným lineárnym systémom. Je to z dôvodu aby Kalmanov filter nebol ovplyvnený šumom. Kalmanov filter teda hladá najoptimálnejším odhad budúceho stavu na základe stavou minulých a popisu systému.  Existuje už vyše 50 rokov, no stále je jedným z najdôležitejším, a najodporučanejším algoritmom.
+Všetky tieto predpoklady spĺňa práve Kalmanov filter, avšak je možné ho použiť len vtedy ak  meraný systém je opísateľný iným lineárnym systémom. Je to z dôvodu aby Kalmanov filter nebol ovplyvnený šumom. Kalmanov filter teda hľadá najoptimálnejším odhad budúceho stavu na základe stavov minulých a popisu systému.  Existuje už vyše 50 rokov, no stále je jedným z najdôležitejším, a najodporučanejším algoritmom.
 
+\begin{figure}[H]
+\begin{center}
+	\includegraphics[scale=0.6]{obrazky/kalman}
+	\caption{Popis algoritmu Klmanového filtra}
+	\end{center}
+\end{figure}
 
-
-
-
-
-Hrubý odhad je predchádzajúci odhad polohy pred aktualizáciou merania. V časti aktualizácia merania už naozaj odhadneme nasledujúci krok. Z rovnice Kalman Gain alebo výpočet kalmanového zisku vyplýva, že ak je šum z merania R veľké, nebudeme dávať veľkú váhu meraniu pri výpočte ďalšieho kroku. Naopak ak je šum merania R malé, priradíme meranej hodnote veľkú váhu pri dalšom kroku.  
+Hrubý odhad je predchádzajúci odhad polohy pred aktualizáciou merania. V časti aktualizácia merania už naozaj odhadneme nasledujúci krok. Z rovnice Kalman Gain alebo výpočet kalmanového zisku vyplýva, že ak je šum z merania R veľké, nebudeme dávať veľkú váhu meraniu pri výpočte ďalšieho kroku. Naopak ak je šum merania R malé, priradíme meranej hodnote veľkú váhu pri ďalšom kroku.  
