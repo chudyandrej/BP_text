@@ -28,17 +28,43 @@ Keďže  koncept snímania priestoru sa opiera o snímanie z výšky, veľmi sil
 
 \begin{itemize}
 \item Kinect 360
-\item Intel RealSence SR300
 \item Orbbec Astra S
+\item Intel RealSence SR300
+
 \end{itemize}
 
 \subsubsection{Testovanie}
 Testovanie spočívalo v umiestnení všetkých troch kamier na vhodné miesto, kde sa nahrával záznam po dobu 10 minút. Vďaka tomu je zaručené, že všetky tri kamery boli vystavené rovnakému prostrediu a boli nahrávané za rovnakých svetelných podmienok.  Počas nahrávania bol udržiavaný konštantný pohyb osôb cez bránu. Pre ohodnotenie kvality jednotlivých záznamov bola použitá \textbf{metrika hodnotenia} založená na priemernom počte nenameraných pixelov na jednom snímku. Nenameraný pixel znamená, že sa nachádza nekonečne ďaleko alebo ide o chybu merania spôsobená tvarom objektu (ostrá hrana), slnečným žiarením, materialom oklitého prostredia alebo iné. \textit{Metóda pre výpočet hodnotiacej metriky konverguje k objektívnemu výsledku len vtedy, ak každý objekt scény sa nachádza v zornom poli kamery, ktoré udáva jej výrobca.}  
 
 \subsubsection{Kinect 360}
-Vnímanie 3D okolitého sveta je dosiahnuté za pomoci hĺbkových senzorov a RGB kamery. Kombináciou týchto technológií je možné získať RGBD obraz s rozlíšením 640 x 480 pixlov.  Kinect sníma frekvenciou 30 Hz. Hĺbka je snímaná s presnosťou na 11 bitov, čiže hĺbka jedného pixela môže nadobudnúť hodnoty od 0 do 2047.  Pracovný rozsah senzora je  1,2 - 3,5 metra.  Využíva technológiu vyvinutú firmou PrimaSence.  V ľavej časti senzora sa nachádza IR projektor s vlnovou dĺžkou svetla 830nm. Generátor kóduje informáciu do svetelných vzorov, ktoré sa odrazom od predmetov pred senzorom deformujú.  Odraz IR svetla je zachytený senzorom v pravej časti senzora a z veľkosti deformácii je vypočítaná hĺbková mapa. Senzor používa USB rozhranie, avšak potrebuje aj prídavné napájanie, kvôli veľkému odberu.
+Kinect sníma frekvenciou 30 Hz. Hĺbka je snímaná s presnosťou na 11 bitov, čiže hĺbka jedného pixela môže nadobudnúť hodnoty od 0 do 2047.  Pracovný rozsah senzora je  1,2 - 3,5 metra.  Využíva technológiu vyvinutú firmou PrimaSence. V ľavej časti senzora sa nachádza IR projektor s vlnovou dĺžkou svetla 830nm. Generátor kóduje informáciu do svetelných vzorov, ktoré sa odrazom od predmetov pred senzorom deformujú. Odraz IR svetla je zachytený senzorom v pravej časti senzora a z veľkosti deformácii je vypočítaná hĺbková mapa. Používa USB 2.0 rozhranie. 
 
-Senzor bol testovaný s využitím ovládača fteenect, čo je openSource projekt vývýjaný komunitou.
+Kedže od spoločnosti Microsoft neexistuje oficialna podpora operačných systémov Unixového typu, na čítanie obrazu z kameri som použil knižnicu vyvíjanú komunitou \textit{libfreenect}. Tú som testoval na RaspberryPI v3 s opereačným systémom Rasbian a MacOS Sierra. Na oboch operačných systémoch fungovala dobre pekne pri 20 až 25 FPS. 
+
+Veľkým problémom pri používaní tohoto hĺbkomeru je jeho veľkosť, váha, nutnosť externého napájania. Ďalší problém sa týka dostupnosti senzora. Senzor je zastaralí a už sa nevyrába. Cena sa momentálne stále drží na úrovni 150 eur čo je podpriemerná cena. 
+
+\subsubsection{Orbbec Astra S}
+Ide o kameru, ktorá má veľmi podobný princíp funkčnosti ako kinect, čiže technológia je založená na vysielaní štrukturovaného svetla. Pracovný rozsah senzora je 0.4 – 2 metra. Kamera je pomerne malá a nepotrebuje externé napájanie. Používa USB 2.0 rozhranie. 
+
+Knižnice od spoločnosť Orbbec má veľmi dobrú podporu všetkých operačných systémov. Cena 150 eur. 
+
+
+\subsubsection{Intel RealSence SR300}
+Je kamera, ktorá sa pomerne dosť líši od predchádzajúcich dvoch. Hlavným rozdielom je, že používa USB 3.0 čo znamená, že posiela väčšie množstvo dát a nieje možné ho pripojiť na RaspberyPi. Technológia snímania je založená na štrukturovanom svetle, podobne ako v predchádzajúcich dvoch prípadoch. Pracovný rozsah kamery je 25 až 70 cm. Cena kamery je tiež okolo 150 eur. 
+
+
+\subsubsection{Porovnanie}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
