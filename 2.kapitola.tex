@@ -8,13 +8,13 @@ Počítačové videnie je vedná disciplína, ktorá sa snaží počítačovými
 \item Interpretácia ľudského mozgu nieje správna. Sietnica ľudského oka je dvojrozmerná preto trojrozmernú predstavou okolia vytvára mozog, na základe znalostí.
 \item Šum. Je prítomný v každom reálnom obraze. Preto namiesto deterministických modelov je potrebné používať stochastické modely, ktoré predpokladajú určitý stupeň neurčitosti a dokážu túto neurčitosť aj zahrnúť do matematického modelu.
 \item Obrovský tok dát prijímaný zo snímačov obrazu, ktoré je nutné spracovať v reálnom čase.
-\item Nejednoznačná interpretácia jasu jednotlivých častí objektu. Bez poznania fyzikálnej povahy sledovaného objektu nie sme schopní jednoznačne určiť či výrazné svetlé škvrny na obraze sú dôsledkom extrémne svetlých častí objektu alebo iba dôsledkom odrazu zdroja svetla v lesklej (ale nie svetlej) časti povrchu.
+\item Nejednoznačná interpretácia jasu jednotlivých častí objektu. Bez poznania fyzikálnej povahy sledovaného objektu nie sme schopní jednoznačne určiť, či výrazné svetlé škvrny na obraze sú dôsledkom extrémne svetlých častí objektu alebo iba dôsledkom odrazu zdroja svetla v lesklej (ale nie svetlej) časti povrchu.
 \end{itemize}
 
 
 \section{Etapy spracovania obrazu}
 
-Jednotlivé etapy spracovávania obrazu možno vyjadriť grafom, ktorý znázoruje postupnosť jednotlivých krokov v závislosti na množstve dát a veľkosti abstrakcie v jednotlivých krokoch. 
+Jednotlivé etapy spracovávania obrazu možno vyjadriť grafom, ktorý znázorňuje postupnosť jednotlivých krokov v závislosti na množstve dát a veľkosti abstrakcie v jednotlivých krokoch. 
 
 \begin{figure}[H]
 \begin{center}
@@ -30,7 +30,7 @@ V nasledujúcom texte si postupne opíšeme každú fázu modelu.
 Základným obmedzením pri vnímaní okolitého 3D sveta, je skutočnosť, že človek dokáže vnímať okolie len 2D, ktorý predstavuje len zjednodušený model 3D okolia.
 
 
-\subsubsection{Dierková komora}, je to model kamery, možno použiť ako prvú aproximáciu mapovania 3D scény do 2D obrazu. Je to analógia toho čo vzniká na sietnici ľudského oka. Obraz sa premieta do obrazovej roviny vzdialenej od dierky o ohniskovej vzdialenosti f. V prípade, že sa zrkadlová rovina presunie pred rovinu projekcie z podobnosti trojuholníkov vyplýva tento vzorec:
+\subsubsection{Dierková komora}Tento model kamery možno použiť ako prvú aproximáciu mapovania 3D scény do 2D obrazu. Je to model kamery, možno ju použiť ako prvú aproximáciu mapovania 3D scény do 2D obrazu. Je to analógia toho, čo vzniká na sietnici ľudského oka. Obraz sa premieta do obrazovej roviny vzdialenej od dierky o ohniskovej vzdialenosti $f$. V prípade, že sa zrkadlová rovina presunie pred rovinu projekcie z podobnosti trojuholníkov vyplýva tento vzorec:
 
 \begin{figure}[H]
 \begin{left}
@@ -51,14 +51,14 @@ Je proces transformácie fyzikálneho obrazu do podoby vhodne pre spracovanie za
 \item \textbf{Vzorkovanie} - Shanonova veta i vzorkovaní nám vraví, že vzorkovacia frekvencia musí byť aspoň 2x väčšia než je maximálna frekvencia, ktorú obsahuje vzorkovací signál.
 $$\textit{f}_{\textit{vzor}} \ge {2} \textit{f}_{\textit{max}}$$
 
-V obrazovej terminológii nám táto veta vraví, že interval vzorkovania musí byť menší alebo rovný polovici rozmerov najmenších detailnou na obraze. 
+V obrazovej terminológii nám táto veta vraví, že interval vzorkovania musí byť menší alebo rovný polovici rozmerov najmenších detailov na obraze. 
 
 \item \textbf{Kvantovanie} 
-Kvantovanie je prevod hodnoty obrazovej funkcie do číselnej hodnoty. Vždy je to proces stratový a nevratný. Počet kvantovacích bodov musí byť dostatočne jemný. Najčastejšie sa v praxi používa 256 úrovní jasu, čo vieme zakódovať do 8 bitov. Výnimku tvoria binárne obrazy ktoré si vystačia len s dvoma úrovňami 0 a 1. Často sa používa na vytvorenie masky v ktorej možno ľahko nájsť kontúry. Najväčší problém kvantovania na nedostatočný počet úrovní je vnímanie falošných hrán. Možno odstrániť nelineárnym kvantovaním, alebo rozostrením obrazu. 
+Kvantovanie je prevod hodnoty obrazovej funkcie do číselnej hodnoty. Vždy je to proces stratový a nevratný. Počet kvantovacích bodov musí byť dostatočne jemný. Najčastejšie sa v praxi používa 256 úrovní jasu, čo vieme zakódovať do 8 bitov. Výnimku tvoria binárne obrazy, ktoré si vystačia len s dvoma úrovňami 0 a 1. Často sa používa na vytvorenie masky v ktorej možno ľahko nájsť kontúry. Najväčší problém kvantovania na nedostatočný počet úrovní je vnímanie falošných hrán. Možno odstrániť nelineárnym kvantovaním, alebo rozostrením obrazu. 
 
 
 
-\item \textbf{Dátové štruktúry} - Najčastejšou reprezentáciu celého obrazu je \textbf{matica} hodnôt. Súradnice prvku v matice zodpovedajú súradniciam pixlu na obraze. Jeho hodnota zodpovedá napríklad jasu.  Okrem nej sa však používajú aj iné ako napríklad kódovanie kontúr segmentovaných objektov. Kontúra je uzavretá hranica objektu, ktorá môže reprezentovať objekt reálneho sveta na obraze a môže byť zdrojom informácii o ňom(tvar, farba, veľkosť).
+\item \textbf{Dátové štruktúry} - Najčastejšou reprezentáciu celého obrazu je \textbf{matica} hodnôt. Súradnice prvku v matice zodpovedajú súradniciam pixlu na obraze. Jeho hodnota zodpovedá napríklad jasu.  Okrem nej sa však používajú aj iné ako napríklad kódovanie kontúr segmentovaných objektov. Kontúra je uzavretá hranica objektu, ktorá môže reprezentovať objekt reálneho sveta na obraze a môže byť zdrojom informácii o ňom (tvar, farba, veľkosť).
 
 Ďalšou možnosťou kódovania je \textbf{Run-length coding} forma reťazového kódu, použitá hlavne v binárnych obrazoch. 
 
@@ -87,11 +87,11 @@ Vstupom aj výstupom je obraz na nízkej úrovni abstrakcie. Slúži na zlepšen
 \textit{Jasová korekcia} - Používa sa pri nerovnomernom osvetlení obrazu. Pokiaľ je porucha
 osvetlenia systematická, vieme korigovať odchýlku každého bodu od ideálnej charakteristiky.
 
-\textit{Modifikácia jasovej stupnice} - Na rozdiel od jasovej korekcie, modifikácia stupnice nezávisí na polohe bodu v obraze. Táto modifikácia T prevedie vstupnú jasovú hodnotu na výstupnú a to pomocou známej funkcie (tabuľky). 
+\textit{Modifikácia jasovej stupnice} - Na rozdiel od jasovej korekcie, modifikácia stupnice nezávisí na polohe bodu v obraze. Táto modifikácia $T$ prevedie vstupnú jasovú hodnotu na výstupnú a to pomocou známej funkcie (tabuľky). 
 
 
 \subsubsection{Geometrické transformácie}
-Geometrická transformácia 2D obrazu je vektorová transformácia T, ktorá zobrazí bod (x,y) do bodu ($x_0$, $y_0$).  Jedná sa teda o transformáciu súradníc bodov obrazu. Vďaka tomu môžeme odstrániť geometrické skreslenie vzniknuté pri snímaní obrazu (napr. korekcie geometrických porúch objektívu kamery, oprava skreslenia družicového snímku spôsobená zakrivením zemegule).  Z toho vyplýva, že pomocou referenčnej mriežky vieme vyrovnať geometricky deformovaný obraz. Transformačné rovnice môžu byť známe alebo odvodené na základe vstupného a transformačného  obrazu. Pred začiatkom transformácie sa musia nájsť dvojice zodpovedajúcich si bodov (vlicovacie body), ktoré sa na obrázkoch ľahko hľadajú napr. priesečníky vláknitých štruktúr, rohy objektov a pod. Následne sa vykoná transformácia súradníc bodov do nových pozícii. A nakoniec sa musí vykonať aproximácia jasovej funkcie.
+Geometrická transformácia 2D obrazu je vektorová transformácia $T$, ktorá zobrazí bod ($x$,$y$) do bodu ($x_0$, $y_0$).  Jedná sa teda o transformáciu súradníc bodov obrazu. Vďaka tomu môžeme odstrániť geometrické skreslenie vzniknuté pri snímaní obrazu (napr. korekcie geometrických porúch objektívu kamery, oprava skreslenia družicového snímku spôsobená zakrivením zemegule).  Z toho vyplýva, že pomocou referenčnej mriežky vieme vyrovnať geometricky deformovaný obraz. Transformačné rovnice môžu byť známe alebo odvodené na základe vstupného a transformačného  obrazu. Pred začiatkom transformácie sa musia nájsť dvojice zodpovedajúcich si bodov (vlícovacie body), ktoré sa na obrázkoch ľahko hľadajú napr. priesečníky vláknitých štruktúr, rohy objektov a pod. Následne sa vykoná transformácia súradníc bodov do nových pozícii. A nakoniec sa musí vykonať aproximácia jasovej funkcie.
 
 \begin{figure}[H]
 \begin{center}
@@ -106,7 +106,7 @@ Používa sa na odstránenie vysokofrekvenčných zložiek, čo predstavujú hra
 \textit{Spriemerovanie} - Ide o najjednoduchší prostriedok pre vyhladenie šumu v obraze. Pre každý bod obrazu sa jeho jas nahradí aritmetickým priemerov jasov jeho susedov. Filtrácia spriemerovaním je vlastne špeciálny prípad konvolúcie, kde konvolučná maska vyzerá nasledovne:
 $$\textit{h}=\frac{1}{9}\begin{bmatrix} 1 & 1 & 1 \\ 1 & 1 & 1 \\ 1 & 1 & 1  \end{bmatrix}$$
 
-\textit{Filtrovanie pomocou Gaussovej masky} - Gaussovú masku dostaneme posilnením stredového bodu, prípadne jeho štyroch susedov, tak aby lepšie aproximoval šum s gaussovým rozdelením.
+\textit{Filtrovanie pomocou Gaussovej masky} - Gaussovú masku dostaneme posilnením stredového bodu, prípadne jeho štyroch susedov, tak aby lepšie aproximoval šum s Gaussovým rozdelením.
 $$\textit{h}=\frac{1}{10}\begin{bmatrix} 1 & 1 & 1 \\ 1 & 2 & 1 \\ 1 & 1 & 1  \end{bmatrix}$$
 $$\textit{h}=\frac{1}{16}\begin{bmatrix} 1 & 2 & 1 \\ 2 & 4 & 2 \\ 1 & 2 & 1  \end{bmatrix}$$
 
@@ -114,12 +114,12 @@ $$\textit{h}=\frac{1}{16}\begin{bmatrix} 1 & 2 & 1 \\ 2 & 4 & 2 \\ 1 & 2 & 1  \e
 
 
 \subsubsection{Lokálne predspracovanie - Detekcia hrán}
-Opak filtrácie, zvyšuje vysokofrekvenčné časti spektra (hrán) a odstránenie nízkofrekvenčných častí. Sprievodný javom je aj zvýraznenie šumu v obraze.  Hrana je vektorová veličina, určená veľkostnou a smerom. Pri hranovej detekcii sa využíva vlastnosť gradientu, že hodnota gradientu funkcie dvoch premenných je v oblasti hrany najväčšia. 
+Opak filtrácie, zvyšuje vysokofrekvenčné časti spektra (hrán) a odstránenie nízkofrekvenčných častí. Sprievodný javom je aj zvýraznenie šumu v obraze.  Hrana je vektorová veličina, určená veľkostnou a smerom. Pri hranovej detekcii sa využíva vlastnosť gradientu,ktorá hovorí, že hodnota gradientu funkcie dvoch premenných je v oblasti hrany najväčšia. 
 
 \textit{Laplacov operátor} - Tento operátor aproximuje druhú deriváciu a predstavuje rýchlosť zmeny hodnôt jasu. Prejaví sa najmä na strmých alebo izolovaných hranách alebo ju možno použiť na detekciu izolovaných bodov. Bude zvýrazňovať aj šum.
 $$\textit{h}_1=\begin{bmatrix} 0 & 1 & 0 \\ 1 & -4 & 1 \\ 0 & 1 & 0  \end{bmatrix}$$
 $$\textit{h}=\begin{bmatrix} 0 & 0 & -1 & 0 & 0 \\ 0 & -1 & -2 & -1 & 0 \\ -1 & -2 & 16 & -2 & -1 \\ 0 & -1 & -2 & -1 & 0 \\ 0 & 0 & -1 & 0 & 0  \end{bmatrix}$$
-Spolu s Laplaceovým operátorom sa používa i vyhladzovací Gaussovnský filter. Vtedy hovoríme o Laplaciáne Gaussiánu – LoG (matica h).
+Spolu s Laplaceovým operátorom sa používa i vyhladzovací Gaussovnský filter. Vtedy hovoríme o Laplaciáne Gaussiánu – LoG (matica $h$).
 
 \textit{Sobelov operátor} - Aproximuje prvé parciálne derivácie. Nakoľko samotná derivácia zvýrazňuje šum, vykonáva ja vyhladzovanie. Pre každý smer hrán existuje špeciálna maska.
 $$\textit{h}_1=\begin{bmatrix} 1 & 2 & 1 \\ 0 & 0 & 0 \\ -1 & -2 & -1  \end{bmatrix}$$
@@ -144,7 +144,7 @@ Segmentácia je rozdelenie obrázku na časti, ktoré silne korelujú s objektam
 \end{itemize}
 
 \subsubsection{Prahovanie}
-Najjednoduchšia segmentačná technika. Je založená na predpoklade, že jednotlivé objekty majú konštantnú obrazivosť či pohltivosť svetla na svojom povrchu. Je to transformácia, ktorá zobrazuje vstupný obraz f(i, j) na výstupný obraz g(i, j) nasledovne: 
+Najjednoduchšia segmentačná technika. Je založená na predpoklade, že jednotlivé objekty majú konštantnú obrazivosť, či pohltivosť svetla na svojom povrchu. Je to transformácia, ktorá zobrazuje vstupný obraz $f(i, j)$ na výstupný obraz $g(i, j)$ nasledovne: 
 $$g (i{,}j)=1 {,}\quad {ak} f(i{,}j)\ge T$$
 $$g (i{,}j)=0 {,}\quad {ak} f(i{,}j)  < T$$
 
@@ -152,7 +152,7 @@ $$g (i{,}j)=0 {,}\quad {ak} f(i{,}j)  < T$$
 Z toho vyplýva, že na segmentovanie objektov od pozadia sa používa jasová konštanta, ktorá sa nazýva prah. 
 
 
-\textit{Globálne prahovanie} - Je to technika ktorá je vhodná, keď sa objekty na scéne diametrálne líšia svojimi charakteristikami. V takom prípade môžeme nastaviť prah ako interval platných hodnôt. Príklad použitia môžeme vidieť na obrázku s kačkou. Originálny obrázok sa konvertuje do HSV farebného priestoru, ktorý umožňuje lepšiu prácu s odtieňmi farieb spôsobené nehomogénnym osvetlením. Následne sa aplikuje filter ktorý prepustí len hodnoty v danom intervale.
+\textit{Globálne prahovanie} - Je to technika. ktorá je vhodná, keď sa objekty na scéne diametrálne líšia svojimi charakteristikami. V takom prípade môžeme nastaviť prah ako interval platných hodnôt. Príklad použitia môžeme vidieť na obrázku s kačkou. Originálny obrázok sa konvertuje do HSV farebného priestoru, ktorý umožňuje lepšiu prácu s odtieňmi farieb spôsobené nehomogénnym osvetlením. Následne sa aplikuje filter ktorý prepustí len hodnoty v danom intervale.
 
 \begin{figure}[H]
 \begin{center}

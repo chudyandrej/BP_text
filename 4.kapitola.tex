@@ -74,9 +74,6 @@ Popis algoritmu pričom všetky kontúry nájdené prostredníctvom funkcie met�
 Inými slovami algoritmus prechádza všetky kontúry a na základe vzdialenosti tažiskových bodov spája do jedného celku.
 
 
-
-
-
 Spájanie zoznamu kontúr je realizovaná prostredníctvom volania funkcie  \textit{cv2.convexHull} ktorá pre množinou bodov points reprezentujúcich obrysové body oblasti nájde inú množinu bodov reprezentujúcich jej konvexný obal.
 
 \subsubsection{Filtrácia nevyhovujúcich kontúr}  
@@ -84,33 +81,138 @@ Keďže poznáme približnú veľkosť kontúry, ktorej detekcia je cieľom záu
 
 
 \subsubsection{Výpočet najvyššieho bodu}
-Vďaka tomu, že technologia snímania vytvára hĺbkovú mapu, je možne vrámci každej kontúry definovať lokálne maximum každej oblasti. Pri zvolenej koncepcii snímania bod patri do množiny bodov nachádzajúcich sa na vrchnej časti hlavy. Tento bod je významný pri sledovaní pohybu objektu. 
+Vďaka tomu, že technologia snímania vytvára hĺbkovú mapu, je možne vrámci každej kontúry definovať lokálne maximum každej oblasti. Pri zvolenej koncepcii snímania bod patri do množiny bodov nachádzajúcich sa na vrchnej časti hlavy. Tento bod je významný pri sledovaní pohybu objektu. \vspace{5mm}
+
 
 Proces nájdenia je definovaný postupom týchto krokov: 
 \begin{enumerate}
   \item Vytvoríme prázdnu \textbf{masku} veľkosti snímaného obrazu \textit{np.zeros}
   \item Do \textbf{masky} vložíme kontúru, ktorej maximálnu oblasť chceme nájsť \textit{cv2.drawContours}
   \item Nájdeme minimálnu respektíve maximálnu hodnotu reprezentujúcu najvyžší bod kontúry  \textit{cv2.minMaxLoc(originalFrame, mask=mask)}
-  \item Nájdenú hodnotu použijeme ako prahovú hodnotu a aplikujeme finkciu prahovania s globálnym prahom na originálny obraz. Výsledkom je binárna maska \textit{cv2.threshold}
+  \item Nájdenú hodnotu použijeme ako prahovú hodnotu a aplikujeme funkciu prahovania s globálnym prahom na originálny obraz. Výsledkom je binárna maska \textit{cv2.threshold}
   \item Medzi maskou vytvorenou v bode 2. a maskou vytvorenou bode 4. vykonáme logickú operáciu AND, čoho výsledkom je binárna maska maximálnej oblasti skúmanej kontúry \textit{cv2.bitwise\_and(mask, thresh)}
   \item Následne môžeme znovu vyhľadať všetky uzavrené oblasti, ktoré vznikli na obraz \textit{cv2.findContours}
   \item Vyberieme kontúru s najväčším obsahom pre ktorú vyrátame ťažisko a nájdený bod prehlásime za maximálny bod oblasti
-  
 \end{enumerate}
 
-
-
-
-
-
-
 \subsection{Priradenie kontúr objektom}
+V prípade, že sme schopný v každom obraze, ktorý patrí do konštantného toku dát zo snímača vykonať spoľahlivú segmentáciu, je možné postúpiť na objektový level abstrakcie. Objekt je určený sériou rôznych kontúr, medzi ktorými existuje vzájomná závislosť.  
+
+Proces vytvárania a zanikania kontúr aplikácie je založený na dvoch hlavných vlastnostiach:
+\begin{itemize}
+\item Pozícia oblasti
+\item Hodnota výškového maxima oblasti
+\end{itemize}
+
+Pre každý existujúci objekt na scéne sa vypočíta apsolútna vzdialenosť ku všetkým nájdeným oblasiam aktuálneho obrazu. Následne sa vzdialenosti usporiadajú od najmenšej po najväčšiu a odstránia všetky, ktoré sú väčšie ako hraničná hodnota stanovená pri konfigurácii. Priradenia ktoré ostali v zozname sa aplikujú a aktualizuje sa aktuálna poloha objektov. V prípade, že kontúre nebol priradený žiadny objekt, vytvorí sa nový a kontúra sa priradí ako inicializačná poloha nového objektu. 
+
+\subsection{Sledovanie objektu}
+Pri sledovaní osôb v pohybe dochádza k rôznym problémom, ktorým je nutné venovať veľkú pozornosť. Najčastejšie riešeným problémom je jednoznačne určiť, ktorá \textbf{kontúra bude priradená ktorému objektu}. Vzhľadom na to, že priemerný tok dát z kamier je 15 - 20 snímkov za sekundu, zmeny polohy objektov medzi dvoma za sebou idúcimi snímkami môžu byť natoľko veľké, že sledovanie zlyhá. Druhým vážnym problémom je \textbf{spojenie sa dvoch kontúr do jednej}, čo spôsoby vytlačenie jedného z objektov, ktorý stratí kontúru ktorú by mohol sledovať. Táto situácia môže nastať fyzickým kontaktom dvoch osôb (veľmi blízky prechod, zrazenie sa, objatie a iné...) Oba problémy majú spoločné riešenie a tým je predikcia nasledujúcej polohy na základe smeru a rýchlosti, ktorú objekt nadobudol v do momentu incidentu.
+V rámci implementácie som otestoval dva algoritmy.
+\begin{itemize}
+\item Kalmanov filter
+\item Výpočet na základe histórie a rýchlosti. 
+\end{itemize}
+
+
+\begin{figure}[H]
+  \centering
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[width=\textwidth]{obrazky/predSpojenim}
+    \caption{Moment pred koliziou dvoch kontúr}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.55\textwidth}
+    \includegraphics[width=\textwidth]{obrazky/spojenie}
+    \caption{Využite predpovedania polohy}
+  \end{minipage}
+\end{figure}
 
 
 
+\textbf{Kalmanov filter} - Teoretický základ funkčnosti tohoto filtra bol opísaný v kapitole XXX. Pri implementácii som využil knižnicu \textit{openCV}, ktorá ho obsahuje. Pri testoch som však objavil veľký problém. Kalmanov filter potrebuje pomerne veľkú históriu korekcii na to, aby získal požadovanú presnosť. Priemerný prechod jedného človeka cez virtuálnu bránu, je zachytený na 10 - 20 snímkoch. Podľa testov Kalmanov filter na získanie základnej presnosti potrebuje 5 - 6 korekcii. Tento problém je samozrejme možné riešiť zmenou snímacieho zariadenia alebo umiestnením kamery na vyššie položené miesto a tým maximalizovať zotrvanie objektov na scéne. 
+
+\textbf{Výpočet na základe histórie a rýchlosti} - Táto metóda je veľmi jednoduchá a opiera sa o vedomosti zo základnej školy. Pre každý objekt vytvoríme históriu, ktorá obsahuje pozíciu a časovú známku. Veľkosť histórie definujeme podľa toho, koľko bodov má ovplyvňovať predikciu nasledujúceho bodu. Proces vvýpočtu predikcie potom vyzerá tak, že najprv vyrátame moment rýchlosti pre x-ovú aj y-ovú os: 
+
+\begin{figure}[H]
+  \centering
+  \begin{minipage}[b]{0.45\textwidth}
+    $$v_x = \frac{last_x - first_x} {t} $$ 
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.4\textwidth}
+    $$v_y = \frac{last_y - first_y} {t} $$ 
+  \end{minipage}
+\end{figure}
+kde \textit{last} je najstaršia známa poloha, \textit{first} je najnovšia pozícia a \textit{t} je celkový čas od najstaršieho po najnovší záznam v histórii. Keď máme vypočítané rýchlosti, máme všetko pre určenie predikcie na základe aktuálneho času takto: 
+
+\begin{figure}[H]
+  \centering
+  \begin{minipage}[b]{0.45\textwidth}
+    $$predicate_x = last_x + v_x * \Delta t $$ 
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.4\textwidth}
+     $$predicate_y = last_y + v_y * \Delta t $$ 
+  \end{minipage}
+\end{figure}
+kde, $\Delta t$ je rozdiel medzi časom hľadanej polohy a časom poslednej známej polohy. Tento výpočet funguje spoľahlivo už pri druhom snímku a pri testoch dosahoval veľmi dobré výsledky. Na základe toho som sa rozhodol využiť na predikciu polohy práve tento algoritmus. 
+
+\section{Implementácia aplikácie s využitím RGB web kamery}
+Implementácia aplikácie s využitím RGB web kamery využíva veľmi podobné stratégie ako aplikácia založená na hĺbkovom snímaní, ktorá bola opísaná vyššie. Dva najvýznamnejšie rozdiely predstavujú:
+\begin{itemize}
+\item Spôsob vytvárania binárnej masky
+\item Určenie významného bodu oblasti - ťažisko oblasti
+\end{itemize}
+
+\subsection{Binárna maska}
+Princíp snímania web kamery je založený na interakcii CCD čipu  so svetlom prichádzajúcim od pozorovaného objektu. Odrazom svetla od povrchu sa môže odraziť v plnom spektre pod rovnakým uhlom (zrkadlo, lesklé objekty), alebo svetlo prenikne do objektu kde sa časť vlnovej dĺžky sa pohltí a zvyšok sa odrazí. Senzor teda vníma spektrum odrazeného svetla ako určitú farbu.
+
+Ak by sme aj v tomto prípade chceli využiť  \textbf{metódu prahovania}, museli by sme zabezpečiť, aby priestor snímaný kamerou bol vždy farebne iný od objektov prechádzajúcich skrz. Tak by bolo možné odfiltrovať všetky pixeli s vlnovou dĺžkou odrazeného svetla (farbou) zodpovedajúcou pozadiu. Ďalej by bolo nutné zabezpečiť homogénne osvetlenie scény, aby bol zabezpečený dostatok svetla. Vzhľadom na všetky tieto problémy je metóda nepoužiteľná pre daný účel.
+
+Výhodnejšou stratégiou predstavuje použitie \textbf{metódy odčítavania pozadia} (Background Subtractor). Je to analytická metóda, pre postupné učenie sa pozadia a jeho odčítavanie od obrazu v popredí. Výsledkom je binárna maska obrazu kde pixel, ktorý sa zmenil má logickú hodnotu 1 a pixel ktorý je pozadím 0. 
+
+\subsubsection{Požiadavky na výkon}
+Algoritmy pre odčítavanie pozadia sú veľmi náročné na výpočtový výkon  a to priamoúmerne na rozlíšení spracovávaného obrazu. Vrámci  implementácie som testoval štyri substraktorori:
+\begin{itemize}
+\item SCMG
+\item MOG
+\item MOG2
+\item KNN
+\end{itemize}
+
+Najlepší pomer kvality binárnej masky a výkonu potrebného na jej získanie má \textit{KNN (K-nearest)}. Jeho implementáciu obsahuje knižnica  \textit{cv2.createBackgroundSubtractorKNN()}. Je veľmi efektívny, ak sa v popredí obrazu mení len jeho malá časť. 
+
+\subsubsection{Paralelné spracovávanie}
+Pri implementácii ďalších testoch sa však ukázalo, že pri spustení aplikácie na Rasperry PI rýchlosť spracovávania jednotlivých obrazov bola nedostatočná (8-10 FPS). Pre zvýšenie priepustnosti spracovávania bolo nutné zlepšiť vyťaženie viacerých jadier procesora súčasne (asynchrónny prístup). 
+
+Implementácia asynchrónneho spracovania funguje na princípe generácie množstva vlákien, ktoré sú spolu synchronizované na základe zámkov. V prvom kroku algoritmu sa inicializuje \textit{videostream} a \textit{background substractor}. Následne sa vygeneruje N vlákien (workers). Každé vlákno obsahuje jeden zámok na čítanie ďalšieho snímku obrazu a druhý zámok pre zápis do zoznamu spracovaných snímkov. Tie sa pri vytváraní uzamknú. Každý worker v nekonečnom cykle vykonáva:
+\begin{enumerate}
+\item Uzamknutie zámku pre čítanie ďalšieho snímku
+\item Čítanie ďalšieho snímku 
+\item Otvorenie zámku pre čítanie nasledujúceho vlákna \textit{(i + 1)}
+\item Zahájenie výpočtu Bacground substractoru
+\item Uzamknutie zámku pre zápis výsledku do zoznamu výsledkov
+\item Vloženie výsledku operácie do zoznamu výsledkov 
+\item Otvorenie zámku pre vloženie výsledku ďalšieho vlákna \textit{(i + 1)} 
+\end{enumerate}
+
+Algoritmus bol testovaný na \textit{Raspberry PI 3}. Nasledujúce grafy prezentujú závislosť rýchlosti spracovávania snímkov na veľkosti snímaného obrazu a počte vlákien algoritmu:
+
+\begin{figure}[H]
+  \centering
+  \begin{minipage}[b]{0.49\textwidth}
+    \includegraphics[width=\textwidth]{obrazky/substractorCalm}
+    \caption{Nemenná scéna}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.49\textwidth}
+    \includegraphics[width=\textwidth]{obrazky/substractorNormal}
+    \caption{Priemerne veľký pohyb na scéne}
+  \end{minipage}
+\end{figure}
+
+Z testov vyplýva, že algoritmus najlepšie pracuje pri snímacom rozlíšení \textbf{640x480 pixlov} s využitím \textbf{štyroch asynchrónnych vlákien}. Pri týchto atribútoch dosiahnutá hodnota snímkov za sekundu (FPS) aj veľkosť rozlíšenia dostatočná pre ďalšie spracovanie. 
 
 
 
-
-
-\subsection{Sledovanie objektu }

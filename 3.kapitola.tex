@@ -41,7 +41,7 @@ Kinect sníma frekvenciou 30 Hz. Hĺbka je snímaná s presnosťou na 11 bitov, 
 
 Kedže od spoločnosti Microsoft neexistuje oficialna podpora operačných systémov Unixového typu, na čítanie obrazu z kameri som použil knižnicu vyvíjanú komunitou \textit{libfreenect}. Tú som testoval na RaspberryPI v3 s opereačným systémom Rasbian a MacOS Sierra. Na oboch operačných systémoch fungovala dobre pekne pri 20 až 25 FPS. 
 
-Veľkým problémom pri používaní tohoto hĺbkomeru je jeho veľkosť, váha, nutnosť externého napájania. Ďalší problém sa týka dostupnosti senzora. Senzor je zastaralí a už sa nevyrába. Cena sa momentálne stále drží na úrovni 150 eur čo je podpriemerná cena. 
+Veľkým problémom pri používaní tohoto hĺbkomeru je jeho veľkosť, váha, nutnosť externého napájania. Ďalší problém sa týka dostupnosti senzora. Senzor je zastaralí a už sa nevyrába. Cena sa momentálne stále drží na úrovni 150 eur. 
 
 \subsubsection{Orbbec Astra S}
 Ide o kameru, ktorá má veľmi podobný princíp funkčnosti ako kinect, čiže technológia je založená na vysielaní štrukturovaného svetla. Pracovný rozsah senzora je 0.4 – 2 metra. Kamera je pomerne malá a nepotrebuje externé napájanie. Používa USB 2.0 rozhranie. 
@@ -52,8 +52,17 @@ Knižnice od spoločnosť Orbbec má veľmi dobrú podporu všetkých operačný
 \subsubsection{Intel RealSence SR300}
 Je kamera, ktorá sa pomerne dosť líši od predchádzajúcich dvoch. Hlavným rozdielom je, že používa USB 3.0 čo znamená, že posiela väčšie množstvo dát a nieje možné ho pripojiť na RaspberyPi. Technológia snímania je založená na štrukturovanom svetle, podobne ako v predchádzajúcich dvoch prípadoch. Pracovný rozsah kamery je 25 až 70 cm. Cena kamery je tiež okolo 150 eur. 
 
-
 \subsubsection{Porovnanie}
+Prvým parametrom porovnávania je \textbf{zorné pole kamier}. Každá hĺbková kamera, podobne ako klasické RGB kamery, majú zorný uhol daný použitou optikou kamery, hĺbkomery však majú navyše atribúty maximálnej a minimálnej vzdialenosti, na ktoré sú schopné vykonať meranie. Je to z dôvodu primárneho použiria kamery, pre ktoré ho výrobca vyrába. Napriklad \textit{Kinect 360} je určený pre hernú konzolu a detekciu celého tela, preto ma zorné pole veľmi veľké, aby mal hráč aj istú dávku voľnosti v pohybe. Presný opak kamery Kinect predstavuje \textit{Intel RealSence} ktorá je určená na aplikácie ovládania PC rôznymi gestami. Z dôvodu takéhoto obmedzenia nieje možné postaviť aplikáciu sledovania prechodov ľudí na jednom type kamery. (OBR 3.3) 
+
+Fyzické okolie virtuálnej brány nemusí dovoľovať umiestniť hĺbkomer do požadovanej snímacej výšky. Preto najlepším spôsobom je vyberať senzor špeciálne pre každé miesto nasadenia. Vďaka tomu je možné realizovať meranie od 2m do 4,5m.
+
+\begin{figure}[H]
+\begin{center}
+	\includegraphics[scale=0.7]{obrazky/camerasViews}
+	\caption{Vizualizácia vertikálneho zorného pola hĺbkomerov}
+	\end{center}
+\end{figure}
 
 
 
@@ -73,14 +82,8 @@ Je kamera, ktorá sa pomerne dosť líši od predchádzajúcich dvoch. Hlavným 
 
 
 
-%rozpísať informácie o použitých kamerách 
-%porovnanie kamier za zvolenej mertiky snímania 
 
 
-%implementácia algoritmu pre hĺbkové kamery 
-%implementácia algoritmu pre RGB kamery
 
-%zhodnitiť úspešnosť algoritmov a celého prístupu 
-%potencial aplikácie do budúcna
 
 
