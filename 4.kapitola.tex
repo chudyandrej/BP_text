@@ -49,12 +49,12 @@ Na základe binárneho obrazu, aplikujeme metódu sledovania hraníc \textit{cv2
 \begin{figure}[H]
   \centering
   \begin{minipage}[b]{0.45\textwidth}
-    \includegraphics[width=\textwidth]{obrazky/spajanieKonturMaska}
+    \includegraphics[width=\textwidth]{images/destroyMask}
     \caption{Roztireštená binárna maska}
   \end{minipage}
   \hfill
   \begin{minipage}[b]{0.4\textwidth}
-    \includegraphics[width=\textwidth]{obrazky/spajanieKonturVysledok}
+    \includegraphics[width=\textwidth]{images/connectMask}
     \caption{Spojená kontúra}
   \end{minipage}
 \end{figure}
@@ -118,12 +118,12 @@ V rámci implementácie som otestoval dva algoritmy.
 \begin{figure}[H]
   \centering
   \begin{minipage}[b]{0.4\textwidth}
-    \includegraphics[width=\textwidth]{obrazky/predSpojenim}
+    \includegraphics[width=\textwidth]{images/beforeCollision}
     \caption{Moment pred koliziou dvoch kontúr}
   \end{minipage}
   \hfill
   \begin{minipage}[b]{0.55\textwidth}
-    \includegraphics[width=\textwidth]{obrazky/spojenie}
+    \includegraphics[width=\textwidth]{images/predicate}
     \caption{Využite predpovedania polohy}
   \end{minipage}
 \end{figure}
@@ -202,17 +202,35 @@ Algoritmus bol testovaný na \textit{Raspberry PI 3}. Nasledujúce grafy prezent
 \begin{figure}[H]
   \centering
   \begin{minipage}[b]{0.49\textwidth}
-    \includegraphics[width=\textwidth]{obrazky/substractorCalm}
+    \includegraphics[width=\textwidth]{images/substractorCalm}
     \caption{Nemenná scéna}
   \end{minipage}
   \hfill
   \begin{minipage}[b]{0.49\textwidth}
-    \includegraphics[width=\textwidth]{obrazky/substractorNormal}
+    \includegraphics[width=\textwidth]{images/substractorNormal}
     \caption{Priemerne veľký pohyb na scéne}
   \end{minipage}
 \end{figure}
 
 Z testov vyplýva, že algoritmus najlepšie pracuje pri snímacom rozlíšení \textbf{640x480 pixlov} s využitím \textbf{štyroch asynchrónnych vlákien}. Pri týchto atribútoch dosiahnutá hodnota snímkov za sekundu (FPS) aj veľkosť rozlíšenia dostatočná pre ďalšie spracovanie. 
+
+
+
+\section{Porovnanie}
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Plánované rozšírenia}
 
 
 

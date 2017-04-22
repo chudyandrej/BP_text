@@ -18,7 +18,7 @@ Jednotlivé etapy spracovávania obrazu možno vyjadriť grafom, ktorý znázor�
 
 \begin{figure}[H]
 \begin{center}
-	\includegraphics[scale=0.45]{obrazky/etapy}
+	\includegraphics[scale=0.45]{images/phaseCV}
 	\caption{Etapy spracovania obrazu}
 	\end{center}
 \end{figure}
@@ -32,14 +32,20 @@ Základným obmedzením pri vnímaní okolitého 3D sveta, je skutočnosť, že 
 
 \subsubsection{Dierková komora}Tento model kamery možno použiť ako prvú aproximáciu mapovania 3D scény do 2D obrazu. Je to model kamery, možno ju použiť ako prvú aproximáciu mapovania 3D scény do 2D obrazu. Je to analógia toho, čo vzniká na sietnici ľudského oka. Obraz sa premieta do obrazovej roviny vzdialenej od dierky o ohniskovej vzdialenosti $f$. V prípade, že sa zrkadlová rovina presunie pred rovinu projekcie z podobnosti trojuholníkov vyplýva tento vzorec:
 
-\begin{figure}[H]
-\begin{left}
-	\includegraphics[scale=0.4]{obrazky/dierkovaKamera}
-	\caption{Vyvolanie a prebeh zmeny stavu v komponente}
-	\end{left}
-\end{figure}
 
-$$\textit{x}=\frac{X\textit{f}}{Z}$$
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}[b]{0.49\textwidth}
+        \includegraphics[width=\textwidth]{images/holeCamera}
+        \caption{Vyvolanie a prebeh zmeny stavu v komponente}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.4\textwidth}
+        $$\textit{x}=\frac{X\textit{f}}{Z}$$
+        \vspace*{2.5cm}
+    \end{minipage}
+\end{figure}
 
 Tento výraz predstavuje najjednoduchší model dierkovej kamery, ktorý je základom zložitejších modelov slúžiacich na výpočty napr. pri 3D projekcií. 
 
@@ -49,6 +55,7 @@ Je proces transformácie fyzikálneho obrazu do podoby vhodne pre spracovanie za
 \item \textbf{Snímanie} (scaning) - Cieľom prvého kroku je prevod optických veličín na elektrické. Pri použití nekvalitného snímača sa na výstupe objaví veľké množstvo šumu, ktoré len ťažko možno korigovať. Preto je nutné dbať na zaistenie čo najväčšej kvality snímača. 
 
 \item \textbf{Vzorkovanie} - Shanonova veta i vzorkovaní nám vraví, že vzorkovacia frekvencia musí byť aspoň 2x väčšia než je maximálna frekvencia, ktorú obsahuje vzorkovací signál.
+
 $$\textit{f}_{\textit{vzor}} \ge {2} \textit{f}_{\textit{max}}$$
 
 V obrazovej terminológii nám táto veta vraví, že interval vzorkovania musí byť menší alebo rovný polovici rozmerov najmenších detailov na obraze. 
@@ -95,7 +102,7 @@ Geometrická transformácia 2D obrazu je vektorová transformácia $T$, ktorá z
 
 \begin{figure}[H]
 \begin{center}
-	\includegraphics[scale=0.4]{obrazky/geometrickaTransformacia}
+	\includegraphics[scale=0.4]{images/transform}
 	\caption{Príklad geometrickej transformácie}
 	\end{center}
 \end{figure}
@@ -104,11 +111,23 @@ Geometrická transformácia 2D obrazu je vektorová transformácia $T$, ktorá z
 Používa sa na odstránenie vysokofrekvenčných zložiek, čo predstavujú hrany a šum. Pri tejto operácii dochádza k stratení detailov obrazu (rozmazanie).
 
 \textit{Spriemerovanie} - Ide o najjednoduchší prostriedok pre vyhladenie šumu v obraze. Pre každý bod obrazu sa jeho jas nahradí aritmetickým priemerov jasov jeho susedov. Filtrácia spriemerovaním je vlastne špeciálny prípad konvolúcie, kde konvolučná maska vyzerá nasledovne:
+
 $$\textit{h}=\frac{1}{9}\begin{bmatrix} 1 & 1 & 1 \\ 1 & 1 & 1 \\ 1 & 1 & 1  \end{bmatrix}$$
 
 \textit{Filtrovanie pomocou Gaussovej masky} - Gaussovú masku dostaneme posilnením stredového bodu, prípadne jeho štyroch susedov, tak aby lepšie aproximoval šum s Gaussovým rozdelením.
-$$\textit{h}=\frac{1}{10}\begin{bmatrix} 1 & 1 & 1 \\ 1 & 2 & 1 \\ 1 & 1 & 1  \end{bmatrix}$$
-$$\textit{h}=\frac{1}{16}\begin{bmatrix} 1 & 2 & 1 \\ 2 & 4 & 2 \\ 1 & 2 & 1  \end{bmatrix}$$
+
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}[b]{0.49\textwidth}
+        $$\textit{h}=\frac{1}{10}\begin{bmatrix} 1 & 1 & 1 \\ 1 & 2 & 1 \\ 1 & 1 & 1  \end{bmatrix}$$
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.49\textwidth}
+        $$\textit{h}=\frac{1}{16}\begin{bmatrix} 1 & 2 & 1 \\ 2 & 4 & 2 \\ 1 & 2 & 1  \end{bmatrix}$$
+    \end{minipage}
+\end{figure}
+
 
 \textit{Mediánový filter} - Medián alebo prostredná hodnota je hodnota, ktorá rozdeľuje postupnosť podľa veľkosti zoradených výsledkov na dve rovnako početné polovice. V štatistike patrí medzi stredné hodnoty. Usporiadame jasové úrovne z lokálneho okolia a vyberieme strednú hodnotu usporiadania. To zabráni, aby krajné extrémy ovplyvnili vybranú hodnotu. Filtrácia však nieje vhodná v obraze, kde sa nachádzajú tenké čiary a ostré rohy. 
 
@@ -117,17 +136,36 @@ $$\textit{h}=\frac{1}{16}\begin{bmatrix} 1 & 2 & 1 \\ 2 & 4 & 2 \\ 1 & 2 & 1  \e
 Opak filtrácie, zvyšuje vysokofrekvenčné časti spektra (hrán) a odstránenie nízkofrekvenčných častí. Sprievodný javom je aj zvýraznenie šumu v obraze.  Hrana je vektorová veličina, určená veľkostnou a smerom. Pri hranovej detekcii sa využíva vlastnosť gradientu,ktorá hovorí, že hodnota gradientu funkcie dvoch premenných je v oblasti hrany najväčšia. 
 
 \textit{Laplacov operátor} - Tento operátor aproximuje druhú deriváciu a predstavuje rýchlosť zmeny hodnôt jasu. Prejaví sa najmä na strmých alebo izolovaných hranách alebo ju možno použiť na detekciu izolovaných bodov. Bude zvýrazňovať aj šum.
-$$\textit{h}_1=\begin{bmatrix} 0 & 1 & 0 \\ 1 & -4 & 1 \\ 0 & 1 & 0  \end{bmatrix}$$
-$$\textit{h}=\begin{bmatrix} 0 & 0 & -1 & 0 & 0 \\ 0 & -1 & -2 & -1 & 0 \\ -1 & -2 & 16 & -2 & -1 \\ 0 & -1 & -2 & -1 & 0 \\ 0 & 0 & -1 & 0 & 0  \end{bmatrix}$$
-Spolu s Laplaceovým operátorom sa používa i vyhladzovací Gaussovnský filter. Vtedy hovoríme o Laplaciáne Gaussiánu – LoG (matica $h$).
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}[b]{0.49\textwidth}
+        $$\textit{h}_1=\begin{bmatrix} 0 & 1 & 0 \\ 1 & -4 & 1 \\ 0 & 1 & 0  \end{bmatrix}$$
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.49\textwidth}
+        $$\textit{h}=\begin{bmatrix} 0 & 0 & -1 & 0 & 0 \\ 0 & -1 & -2 & -1 & 0 \\ -1 & -2 & 16 & -2 & -1 \\ 0 & -1 & -2 & -1 & 0 \\ 0 & 0 & -1 & 0 & 0  \end{bmatrix}$$
+    \end{minipage}
+\end{figure}
+
 
 \textit{Sobelov operátor} - Aproximuje prvé parciálne derivácie. Nakoľko samotná derivácia zvýrazňuje šum, vykonáva ja vyhladzovanie. Pre každý smer hrán existuje špeciálna maska.
-$$\textit{h}_1=\begin{bmatrix} 1 & 2 & 1 \\ 0 & 0 & 0 \\ -1 & -2 & -1  \end{bmatrix}$$
-$$\textit{h}_2=\begin{bmatrix} 0 & 1 & 2 \\ -1 & 0 & 1 \\ -2 & -1 & 0  \end{bmatrix}$$
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}[b]{0.49\textwidth}
+        $$\textit{h}_1=\begin{bmatrix} 1 & 2 & 1 \\ 0 & 0 & 0 \\ -1 & -2 & -1  \end{bmatrix}$$
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.49\textwidth}
+        $$\textit{h}_2=\begin{bmatrix} 0 & 1 & 2 \\ -1 & 0 & 1 \\ -2 & -1 & 0  \end{bmatrix}$$
+    \end{minipage}
+\end{figure}
+
 
 \begin{figure}[H]
 \begin{center}
-	\includegraphics[scale=0.16]{obrazky/hranove_filtre}
+	\includegraphics[scale=0.16]{images/edgeDetector}
 	\caption{Vzájomné porovnanie algoritmou pre detekciu hrán}
 	\end{center}
 \end{figure}
@@ -156,7 +194,7 @@ Z toho vyplýva, že na segmentovanie objektov od pozadia sa používa jasová k
 
 \begin{figure}[H]
 \begin{center}
-	\includegraphics[scale=0.25]{obrazky/prahovanie}
+	\includegraphics[scale=0.25]{images/trasholding_duck}
 	\caption{Detekcia tela kačky na základe prahovania}
 	\end{center}
 \end{figure}
@@ -169,7 +207,7 @@ kde $f_c$ je časť obrazu v ktorej sa určuje prah.
 
 \begin{figure}[H]
 \begin{center}
-	\includegraphics[scale=0.15]{obrazky/lokalne_prahovanie}
+	\includegraphics[scale=0.15]{images/trasholding}
 	\caption{Porovnanie výsledkov metod lokalneho prahovania}
 	\end{center}
 \end{figure}
@@ -251,7 +289,7 @@ Tieto metódy potrebujú pre snímanie scény zisk z dvoch kamier zo vzájomne r
 
 \begin{figure}[H]
 \begin{center}
-	\includegraphics[scale=0.5]{obrazky/poloha_kamier_3D}
+	\includegraphics[scale=0.5]{images/3D_cameraPos}
 	\caption{Možnosti vzájomných polôch dvoch kamier}
 	\end{center}
 \end{figure}
@@ -261,14 +299,26 @@ V nasledujúcom texte sa však obmedzíme na situáciu A. Obe kamery snímajú s
 
 \begin{figure}[H]
 \begin{center}
-	\includegraphics[scale=1.8]{obrazky/triangulacia}
+	\includegraphics[scale=1.8]{images/stereoscope}
 	\caption{Výpočet vzdialenosti na základe tirangulácie}
 	\end{center}
 \end{figure}
 
 podobnosti trojuholníkov potom platí:
-$$\frac{X_L}{f}=\frac{x-d}{z}\ {;}\quad \frac{X_R}{f}\frac{x+d}{z}$$ 
-$$ z=\frac{-2df}{X_L-X_R}$$
+
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}[b]{0.49\textwidth}
+        $$\frac{X_L}{f}=\frac{x-d}{z}\ {;}\quad \frac{X_R}{f}\frac{x+d}{z}$$ 
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.49\textwidth}
+       $$ z=\frac{-2df}{X_L-X_R}$$
+    \end{minipage}
+\end{figure}
+
+
 
 Z obrázka vyplýva, že pri známych veličinách $f$ (ohnisková vzdialenosť) a $d$ (vzdialenosť kamier od seba) vieme vypočítať pre každý pixel jeho hĺbku. Je to možné na základe disparity, čo je rozdiel medzi polohou bodu snímaného jednou kamerou oproti pozícii toho istého bodu snímaného druhov kamerou. Takže každý pixel scény pozorovanej dvoma kamerami má istú hodnotu disparity. Čim je vzdialenosť od kamier väčšia, tým je táto hodnota menšia a čím je vzdialenosť menšia hodnota disparity je väčšia. Implementácia je veľmi náročná. Vyžaduje si presné technické špecifikácie kamier a algoritmy, ktoré dokážu nájsť korešpondujúce body sú zložité. Najpoužívanejším je RANSAC. 
 
@@ -300,7 +350,7 @@ Všetky tieto predpoklady spĺňa práve Kalmanov filter, avšak je možné ho p
 
 \begin{figure}[H]
 \begin{center}
-	\includegraphics[scale=0.6]{obrazky/kalman}
+	\includegraphics[scale=0.5]{images/kalman}
 	\caption{Popis algoritmu Klmanového filtra}
 	\end{center}
 \end{figure}
