@@ -3,10 +3,10 @@
 Nasledujúca kapitola sa bude zaoberať popisom implementácie dvoch programov pre snímanie prechodov ľudí cez virtuálnu bránu. Prvý program je založený na základe snímania hĺbkovej mapy pomocov hĺbkomera a druhý  na použití bežnej RGB web kamery.
 
 \section{Programovací jazyk a využité knižnice}
-Pri implementácii oboch programov som zvolil programovací jazyk \textit{Python 3}\footnote{Skriptovací jazyk \url{https://www.python.org}} v spojení s knižnicou \textit{OpenCV}\footnote{Kniznica \url{http://opencv.org}}. Je to knižnica vytvorená pre počítačové videnie a strojové učenie, distribuovaná pod BSD licenciou. Kladie veľký dôraz na aplikácie bežiace v reálnom čase. 
+Pri implementácii oboch programov som zvolil programovací jazyk \textit{Python 3}\footnote{Skriptovací jazyk \url{https://www.python.org}} v spojení s knižnicou \textit{OpenCV}\footnote{Computer vision knižnica  \url{http://opencv.org}}. Je to knižnica vytvorená pre počítačové videnie a strojové učenie, distribuovaná pod BSD licenciou. Kladie veľký dôraz na aplikácie bežiace v reálnom čase. 
 
 \section{Výpočetná základňa aplikácie}
-Z dôvodu minimalizácie ceny zariadenia som ako primárnu platformu zvolil \textbf{RaspberyPI vo verzii 3}. 
+Z dôvodu minimalizácie ceny zariadenia bola zvolená ako primárna platforma \textbf{RaspberyPI vo verzii 3}. 
 
 Ide o malý počítač za ktorým stojí britská nadácia s rovnomenným názvom Raspbery PI. Postavený je na  integrovanom Broadcom SoC procesore BCM2837, ktorý má štyri 1.2 GHz 64-bitové ARM Cortex-A53 jadrá. Ďalšími parametrami sú 1 GB RAM, 100 Mbps Ethernet port, štyri USB 2.0 porty, HDMI výstup. Cena sa pohybuje okolo 45 eur. 
 
