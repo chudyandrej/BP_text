@@ -3,9 +3,9 @@
 Jedným z hlavných cieľov tejto práce je porovnať využitie 3D a 2D technológie pri sledovaní prechodov osôb cez virtuálnu bránu. Za týmto účelom boli vytvorené dva programy, ktoré sa podrobili dôkladným testom, ktorých výsledky boli následne porovnané. 
 
 \subsection{Testovanie v reálnom prostredí farmaceutickej firmy}
-Za účelom testovania aplikácie boli vytvorené dva 3 - 4 hodinové záznamy zo špedičnej prvácky farmaceutickej firmy. Zariadenie bolo umiestnené na miesto frekventovaného prechodu, ktorý predstavoval spojovacie dvere medzi dvoma oddeleniami. Zamestnanci prechádzali osobitne ale aj v skupinách a väčšina v rukách alebo na ručnom vozíku prenášal tovar, ktorý predstavoval kopy krabíc naukladaných na seba. 
+Za účelom testovania aplikácie boli vytvorené dva 3 - 4 hodinové záznamy zo špedičnej prevádzky farmaceutickej firmy. Zariadenie bolo umiestnené na miesto frekventovaného prechodu, ktorý predstavoval spojovacie dvere medzi dvoma oddeleniami. Zamestnanci prechádzali osobitne, ale aj v skupinách a väčšina v rukách alebo na ručnom vozíku prenášala tovar, ktorý predstavoval kopy krabíc naukladaných na sebe. 
 
-Obe kamery boli umiestnené podľa konceptu opísaného v kap X.X.X, tak aby snímali približne rovnaký bod prechodu. Jednotlivé programy uspeli nasledovne:  
+Obe kamery boli umiestnené podľa konceptu (kapitola \ref{sec:draft}), tak aby snímali približne rovnaký bod prechodu. Jednotlivé programy uspeli nasledovne:  
 
 \begin{figure}[H]
   \centering
@@ -20,7 +20,7 @@ Obe kamery boli umiestnené podľa konceptu opísaného v kap X.X.X, tak aby sn�
   \end{minipage}
 \end{figure}
 
-Všetky chyby spôsobené v programe používajúci \textbf{2D snímanie scény} boli spôsobené vozíkom, ktorý človek ťahal za sebov ako je znázornené na obrázku. 
+Všetky chyby spôsobené v programe používajúci \textbf{2D snímanie scény} boli spôsobené vozíkom, ktorý človek ťahal za sebou ako je znázornené na obrázku. 
 
 \begin{figure}[H]
   \centering
@@ -35,7 +35,7 @@ Všetky chyby spôsobené v programe používajúci \textbf{2D snímanie scény}
   \end{minipage}
 \end{figure}  
 
-Na vyriešenie opísanej chyby je nutné disponovať väčším množstvom informácii z obrazu. S použitou technológiou pri takomto prípade nieje možné spoľahlivo rozoznať, či sa jedná o vozík, ktorý je ťahaný za človekom alebo o ďalšieho človeka kráčajúceho za ním. V prípade, že zamestnanec vozík tlačil pred sebou, program dokázal jednotlivé kontúry pospájať do jednej veľkej a tak človek aj vozík predstavovali jeden objekt. Ďalším zdrojom chýb bol extrémne naplnený vozík, ktorého náklad bol tak vysoký, že pri prechode zabral celý obraz snímaný kamerou. Tento prípad sa takisto programu nepodarilo zadetekovať a odstrániť.
+Na vyriešenie opísanej chyby je nutné disponovať väčším množstvom informácii z obrazu. S použitou technológiou pri takomto prípade nieje možné spoľahlivo rozoznať, či sa jedná o vozík, ktorý je ťahaný za človekom alebo o ďalšieho človeka kráčajúceho za ním. V prípade, že zamestnanec vozík tlačil pred sebou, program dokázal jednotlivé kontúry pospájať do jednej veľkej, a tak človek aj vozík predstavovali jeden objekt. Ďalším zdrojom chýb bol extrémne naplnený vozík, ktorého náklad bol tak vysoký, že pri prechode zabral celý obraz snímaný kamerou. Tento prípad sa takisto programu nepodarilo detekovať a odstrániť.
 
 V rovnakých podmienkach si program, ktorý používa \textbf{3D metódu snímania} poradil o niečo lepšie. Na 54 veľmi náročných prechodoch situáciu vyhodnotil zle len 2x. Obe chyby boli spôsobené už spomínaným vozíkom s veľmi vysoko naloženým nákladom. Avšak ten istý vozík prechádzal štyrikrát, čiže v polovici prípadov si program využívajúci 3D poradil aj s touto hraničnou situáciou narozdiel od programu využívajúceho 2D snímanie, ktorý zlyhal vo všetkých štyroch prípadoch. 
 
@@ -53,7 +53,7 @@ V rovnakých podmienkach si program, ktorý používa \textbf{3D metódu sníman
 \end{figure}  
 
 \subsection{Dlhodobé testovanie v simulovaný podmienkach}
-V priebehu vývoja oboch algoritmov, vznikalo veľké množstvo videí, na ktorých boli simulované rôzne sytuácie, ktoré v dynamickom prostredí virtuálnej brány môžu nastať. Ako napríklad prechod jednej, dvoch alebo viacerých osôb jedným alebo opačným smerom, zrazenie sa dvoch a viacerých ľudí, "motanie sa" v priestoroch virtuálnej brány, prebehnutie, skákanie a iné situácie. S využitím všetkých záznamov bola vypočítaná úspešnosť oboch algoritmov na vzorke stoviek prechodov.    
+V priebehu vývoja oboch algoritmov, vznikalo veľké množstvo videí, na ktorých boli simulované rôzne situácie, ktoré v dynamickom prostredí virtuálnej brány môžu nastať. Ako napríklad prechod jednej, dvoch alebo viacerých osôb jedným alebo opačným smerom, zrazenie sa dvoch a viacerých ľudí, "motanie sa" v priestoroch virtuálnej brány, prebehnutie, skákanie a iné situácie. S využitím všetkých záznamov bola vypočítaná úspešnosť oboch algoritmov na vzorke stoviek prechodov.    
 
 
 
@@ -62,7 +62,7 @@ V priebehu vývoja oboch algoritmov, vznikalo veľké množstvo videí, na ktor�
 \item Program, ktorý na snímanie využíva \textbf{3D snímanie priestoru} dosiahol úspešnosť \textbf{98\%}
 \end{itemize}
 
-Hlavným dôvodom výraznejšieho úspechu 3D technológie je stabilnejšie určenie primárneho bodu v kontúre (hlava). Vďaka tomu, predikčný algoritmus pracoval s presnejšími hodnotami a prípade náhlej straty kontúry objektu, dokázal s veľkou úspešnosťou opätovne kontúru nájsť na základe predikcie nasledujúceho pohybu. U 2D technológie obrazu je veľmi náročné určiť nejaký stabilný bod. Preto sa algoritmus opiera o hodnotu ťažiska jednotlivých kontúr. Tvar a veľkosť kontúry je však veľmi menná čo spôsobuje, že aj poloha ťažiska nemá lineárny priebeh (vysoký šum). Ďalšou výhodou 3D technológie, je možnosť odfiltrovať objekty, podľa ich výšky.
+Hlavným dôvodom výraznejšieho úspechu 3D technológie je stabilnejšie určenie primárneho bodu v kontúre (hlava). Vďaka tomu, predikčný algoritmus pracoval s presnejšími hodnotami a prípade náhlej straty kontúry objektu, dokázal s veľkou úspešnosťou opätovne kontúru nájsť na základe predikcie nasledujúceho pohybu. Pri 2D technológií obrazu je veľmi náročné určiť stabilný bod. Preto sa algoritmus opiera o hodnotu ťažiska jednotlivých kontúr. Tvar a veľkosť kontúry je však veľmi menná, čo spôsobuje, že aj poloha ťažiska nemá lineárny priebeh (vysoký šum). Ďalšou výhodou 3D technológie, je možnosť odfiltrovať objekty, podľa ich výšky.
 
 \vspace{5mm}
 
@@ -70,28 +70,28 @@ Hlavným dôvodom výraznejšieho úspechu 3D technológie je stabilnejšie urč
 \subsection{Bezpečnostné problémy}
 Porovnanie v tejto kategórii je veľmi prínosné vzhľadom na ďalšie využitie v bezpečnostných aplikáciach. Obe technológie snímania majú svoje silné a slabé stránky.
 \subsubsection{3D technológia}
-Prvý problém predstavuje situácia ak je stanovený výškový prach detekcie objektov (napríklad prípad s vozíkmi), alebo hĺbkový snímač nemá dostatočne veľký dosah snímania (až po zem). V týchto prípadoch môže útočník podpliesť tento prah snímania. Ďalším potenciálnym problémom je, že hĺbkové senzory nevedia detektovať isté druhy materiálov ako napríklad sklo. Na druhej strane sú však mnohé výhody ako napríklad  nezávislosť na osvetlení priestoru. Snímanie funguje aj za úplnej tmy. 
+Prvý problém predstavuje situácia, ak je stanovený výškový prach detekcie objektov (napríklad prípad s vozíkmi), alebo hĺbkový snímač nemá dostatočne veľký dosah snímania (až po zem). V týchto prípadoch môže útočník podliezť tento prah snímania. Ďalším potenciálnym problémom je, že hĺbkové senzory nevedia vykonať meranie oproti istému druhu materiálov ako napríklad sklo. Na druhej strane sú však mnohé výhody ako napríklad  nezávislosť na osvetlení priestoru. Snímanie funguje aj za úplnej tmy. 
 
 \subsubsection{2D technológia}
-Slabinou tohto systému je samotný background substractor, ktorý pracuje na princípe učenia sa pozadia. To znamená, že ak potencionálny útočník sa postaví do obrazu a bude tam stáť dostatočne dlho, systém sa ho naučí ako súčasť pozadia. Takto môže postupne prejsť celý prechod. Ďalším všeobecným problémom technológie je svetlo. Prechod musí byť vždy dobre osvetlený (homogénne svetlo), inak detekcia nieje možná. 
+Slabinou tohto systému je samotný background substractor, ktorý pracuje na princípe učenia sa pozadia. To znamená, že ak sa potencionálny útočník  postaví do obrazu a bude tam stáť dostatočne dlho, systém sa ho naučí ako súčasť pozadia. Takto môže postupne prejsť celý prechod. Ďalším všeobecným problémom technológie je svetlo. Prechod musí byť vždy dobre osvetlený (homogénne svetlo), inak detekcia nieje možná. 
 
 \vspace{5mm}
 
 \subsection{Zhodnotenie}
-Systém založený na 2D snímaní pomocou kamery je vhodný pre aplikácie, kde nieje požadovaná extrémna presnosť ale nízka cena. Príkladom môže byť obchod, ktorý si vedie štatistiku návštev. Na druhej strane 3D snímanie pomocou hĺbkomer je vhodný pre bezpečnostné aplikácie súvisiace s objektovou bezpečnosťou. Výhodu je pridaný údaj o hĺbke, vysoká presnosť snímania, bezpečnosť.       
+Systém založený na 2D snímaní pomocou kamery je vhodný pre aplikácie, kde nieje požadovaná extrémna presnosť, ale nízka cena. Príkladom môže byť obchod, ktorý si vedie štatistiku návštev. Na druhej strane 3D snímanie pomocou hĺbkomer je vhodný pre bezpečnostné aplikácie súvisiace s objektovou bezpečnosťou. Výhodu je pridaný údaj o hĺbke, vysoká presnosť snímania, bezpečnosť.       
 
 
 \section{Možnosti rozšírenia}
-Najvýznamnejšou možnosťou rozšírenia projektu je využitie ako základ aplikácie, ktorý rieši objektovú bezpečnosť. Vďaka tomuto projektu je možné zistiť, že niekto prešiel daným priestorom. Ďalším krokom vpred, by malo byť priradenie identity jednotlivým objektom. To možno dosiahnuť rôznim spôsobom: 
+Najvýznamnejšou možnosťou rozšírenia projektu je využitie ako základ aplikácie, ktorý rieši objektovú bezpečnosť. Vďaka tomuto projektu je možné zistiť, že niekto prešiel daným priestorom. Ďalším krokom vpred, by malo byť priradenie identity jednotlivým objektom. To možno dosiahnuť rôznym spôsobom: 
 
 \begin{itemize}
-\item \textit{Vysoko-výkonového RFID} - Jednalo by sa teda o identitu na základe vlastníctva (čip). Tento spôsob však prináša technologické problémy, keďže by bolo veľmi ťažké zabezpečiť, aby RFID antény príjmami signál len od čipov nachádzajúcich sa v priestore brány. 
+\item \textit{Vysoko-výkonového RFID} - Jednalo by sa teda o identitu na základe vlastníctva (čip). Tento spôsob však prináša technologické problémy, keďže by bolo veľmi ťažké zabezpečiť, aby RFID antény príjmali signál len od čipov nachádzajúcich sa v priestore brány. 
 \item \textit{Biometrické systémy} - Na základe tvárovej biometrie by bolo možné priradiť identitu danému človeku. V spojení s týmto projektom by bolo možné odhaliť potencionálneho útočníka, ktorý odmietne interakciu s takýmto biometrickým zariadením (musí sa pozrieť do kamery).
 \item \textit{Iné} 
 \end{itemize}
 
 
-Ďalšou  možnosťou rozšírenia projektu spočíva v dobudovaní serverovej infraštruktúry a vytvorenie informačného systému pre správu štatistík o návštevnosti nejakého miesta. Cieľovým zákazníkom takéhoto systému sú všetky obchodné reťazce ktorých zaujíma návštevnosť svojich predajní v závislosti na čase či mesiaci.
+Ďalšou  možnosťou rozšírenia projektu spočíva v dobudovaní serverovej infraštruktúry a vytvorenie informačného systému pre správu štatistík o návštevnosti nejakého miesta. Cieľovým zákazníkom takéhoto systému sú všetky obchodné reťazce, ktorých zaujíma návštevnosť svojich predajní v závislosti na čase či miesta.
 
 
 
