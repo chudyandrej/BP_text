@@ -12,23 +12,25 @@ Z problémov opísaných v sekcii \ref{sec:problems} je jasné, že jednoduché 
 Jedným z najkomplexnejších prostriedkov, ako dostať dáta do počítača na spracovanie je kamera, ktorá nám poslúži ako senzor.  Umiestnime ju na vrchnú priečku prechodu tak, aby snímala osoby z vrchu. Táto pozícia je najlepšia, lebo eliminuje možnosti zatienenia sledovaného objektu iným objektom na scéne.  
 
 \begin{figure}[H]
-  \centering
-  \begin{minipage}[b]{0.2\textwidth}
-    \includegraphics[width=\textwidth]{images/conceptCameraPos}
-    \caption{Poloha kamery.}
-  \end{minipage}
-  \hfill
-  \begin{minipage}[b]{0.5\textwidth}
-    \includegraphics[width=\textwidth]{images/conturesConcept}
-    \caption{Obraz snímanej scény}
-  \end{minipage}
+    \centering
+    \begin{minipage}[p]{0.49\textwidth}
+        \centering
+        \includegraphics[width=3cm]{images/conceptCameraPos}
+        \caption{Poloha kamery.}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[p]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/conturesConcept}
+        \caption{Obraz snímanej scény}
+    \end{minipage}
 \end{figure}
 
 % \section{Výber snezora (kamery)}
 % Výber vhodného snímača priestoru virtuálnej brány je veľmi dôležitý. Ak senzor bude snímať dáta, ktoré sú enormne zaťažené šumom, realizácia funkčného algoritmu bude veľmi náročná, v niektorý prípadoch až nemožná. Táto práca sa zameriava na dva typy vhodných kamier \textbf{3D kamery} a\textbf{ 2D  RGB kamery}.
 
 \section{Výber hĺbkového snímača}
-Keďže  koncept snímania priestoru sa opiera o snímanie z výšky, veľmi silným kandidátom sú aktívne 3D kamery. Veľká výhoda je meranie na základe tvorby hĺbkového obrazu(kapitola \ref{sec:activeDeep}). Vďaka tomu, má meranie vysokú presnosť, nepotrebuje osvetlenie priestoru ani kontrastné prostredie.  Ďalšou veľkou výhodou je informácia o výške osoby, ktorá prechádza. Táto informácie je použiteľná v mnohých aspektoch ďalšieho spracovania. Na druhej strane technológia aktívneho 3D hĺbkomeru je náchylná na priame slnečné lúče. Tie dokážu merania veľmi znehodnotiť. Vo svojej práci som otestoval tri rôzne aktívne hĺbkomery: 
+Keďže  koncept snímania priestoru sa opiera o snímanie z výšky, veľmi silným kandidátom sú aktívne 3D kamery. Veľká výhoda je meranie na základe tvorby hĺbkového obrazu (sekcia \ref{sec:activeDeep}). Vďaka tomu, má meranie vysokú presnosť, nepotrebuje osvetlenie priestoru ani kontrastné prostredie.  Ďalšou veľkou výhodou je informácia o výške osoby, ktorá prechádza. Táto informácie je použiteľná v mnohých aspektoch ďalšieho spracovania. Na druhej strane technológia aktívneho 3D hĺbkomeru je náchylná na priame slnečné lúče. Tie dokážu merania veľmi znehodnotiť. Táto práca sa zaoberá testovaním troch rôznych aktívnych hĺbkomerov: 
 
 \begin{itemize}
 \item Kinect 360
@@ -40,11 +42,11 @@ Keďže  koncept snímania priestoru sa opiera o snímanie z výšky, veľmi sil
 
 \subsection{Základné informácie o testovaných hĺbkomeroch}
 \subsubsection{Kinect 360}
-Kamera sníma frekvenciou 30 Hz. Hĺbka je snímaná s presnosťou na 11 bitov, čiže hĺbka jedného pixlu môže nadobudnúť hodnoty od 0 do 2047.  Pracovný rozsah senzora je  1,2 - 3,5 metra.  Využíva technológiu vyvinutú firmou PrimaSence.%% V ľavej časti senzora sa nachádza IR projektor s vlnovou dĺžkou svetla 830nm. Generátor kóduje informáciu do svetelných vzorov, ktoré sa odrazom od predmetov pred senzorom deformujú. Odraz IR svetla je zachytený senzorom v pravej časti senzora a z veľkosti deformácii je vypočítaná hĺbková mapa. Používa USB 2.0 rozhranie. 
+Kamera sníma frekvenciou 30 Hz. Hĺbka je snímaná s presnosťou na 11 bitov, čiže hĺbka jedného pixlu môže nadobudnúť hodnoty od 0 do 2047.  Pracovný rozsah senzora je  1,2 - 3,5 metra.  Využíva technológiu vyvinutú firmou PrimaSence (sekcia \ref{sec:activeDeep}).
 
 Keďže od spoločnosti Microsoft neexistuje oficiálna podpora operačných systémov Unixového typu, na čítanie obrazu z kamery bola použitá knižnica \textit{libfreenect}\footnote{Knižnica dostupná na GitHub.com \url{https://github.com/OpenKinect/libfreenect.git}} ktorá je vyvíjaná a podporovaná komunitným spôsobom. Bola testovaná na \textit{RasperryPI verzie 3}\footnote{Malí počítač založeny na ARM technológii \url{https://www.raspberrypi.org}} s opereačným systémom Rasbian a MacOS Sierra. Použitá knižnica fungovala spoľahlivo. Na raspberry PI občasne vznikala menšia latencia spôsobená nižším výkonom.  
 
-Výrazný problémom pri používaní tohoto hĺbkomeru je jeho veľkosť, váha, nutnosť externého napájania. Ďalší problém sa týka dostupnosti senzora. Senzor je zastaralí a už sa nevyrába. Cena sa momentálne stále drží na úrovni 150 eur. 
+Výrazný problémom pri používaní tohoto hĺbkomeru je jeho veľkosť, váha, nutnosť externého napájania. Ďalší problém sa týka dostupnosti senzora. Senzor je zastaralí a už sa nevyrába. Cena sa momentálne stále drží na úrovni 100 eur. 
 
 \subsubsection{Orbbec Astra S}
 Ide o kameru, ktorá má veľmi podobný princíp funkčnosti ako kinect, čiže technológia je založená na vysielaní štrukturovaného svetla. Pracovný rozsah senzora je 0.4 – 2 metra. Kamera je pomerne malá a nepotrebuje externé napájanie. Používa USB 2.0 rozhranie. 
