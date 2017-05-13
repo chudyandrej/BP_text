@@ -205,9 +205,9 @@
  \ifEqString{#1}{UITS}{inteligentních systémů}{\@department@CS}%
  \ifEqString{#1}{UITS}{inteligentních systémů}{\@department@SK}%
  \ifEqString{#1}{UITS}{Intelligent Systems}{\@department@EN}%
- \ifEqString{#1}{UPGM}{počítačové grafiky a multimédií}{\@department@CS}%
- \ifEqString{#1}{UPGM}{počítačové grafiky a multimédií}{\@department@SK}%
- \ifEqString{#1}{UPGM}{Computer Graphics and~Multimedia}{\@department@EN}%
+ \ifEqString{#1}{UPGM}{inteligentních systémů}{\@department@CS}%
+ \ifEqString{#1}{UPGM}{inteligentných systémov}{\@department@SK}%
+ \ifEqString{#1}{UPGM}{intelligent Systems}{\@department@EN}%
  \ifnasel
  \else
    \typeout{Spatny ustav! Moznosti: UPSY, UIFS, UITS, UPGM}\set@department{UIFS}
@@ -507,11 +507,9 @@
 \newsavebox{\@obrlogo}\newsavebox{\@rtext}\newlength{\@vyskartext}\newlength{\@sirkartext}\newlength{\@vyskaobr}\newlength{\@sirkaobr}%
 
 
-\ifPrint
-  \savebox{\@obrlogo}{\hspace*{-0.6cm}\includegraphics[width=4.1cm,keepaspectratio,trim={1.2cm 1.2cm 1.2cm 1.2cm},clip]{template-fig/VUT_symbol_cernobile_CZ}}%symbol VUT
-\else
-  \savebox{\@obrlogo}{\hspace*{-0.6cm}\includegraphics[width=4.1cm,keepaspectratio,trim={1.2cm 1.2cm 1.2cm 1.2cm},clip]{template-fig/VUT_symbol_barevne_CMYK_CZ}}%symbol VUT
-\fi
+
+\savebox{\@obrlogo}{\hspace*{-0.6cm}\includegraphics[width=4.1cm,keepaspectratio,trim={1.2cm 1.2cm 1.2cm 1.2cm},clip]{template-fig/VUT_symbol_barevne_CMYK_CZ}}%symbol VUT
+
 
 \savebox{\@rtext}{\vbox{\mkuctxt{18}{\ifslovak\@vut@SK\else\ifczech\@vut@CS\else\@vut@EN\fi\fi}\mkuctxt{11}{\ifczech\@vut@EN\else\ifslovak\@vut@EN\else\@vut@CS\fi\fi}}}%text VUT
 \settoheight{\@vyskaobr}{\makebox{\usebox{\@obrlogo}}}% vyska loga / logo height

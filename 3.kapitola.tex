@@ -3,13 +3,13 @@
 \chapter{Návrh riešenia problému}
 \section{Existujúce problémy}
 \label{sec:problems}
-Pred zahájením tvorby aplikácie je nutné oboznámiť sa s problémami. Na prvý pohľad  sa môže zdať, že  počítanie ľudí je jednoduchý proces. Predpokladajme, že virtuálna brána je umiestnená pri vstupe do miestnosti. Proces prechodu osoby znamená zvýšenie počítadla prechodov osôb a na základe smeru danej osoby dekrementovať alebo inkrementovať počet osob nachádzajúcich sa v miestnosti. Systém musí byť navrhnutý tak, aby bol schopný detekovať a sledovať aj viacero ľudí, ktorí v jedenom okamihu prechádzajú cez virtuálnu bránu rovnakým alebo rozličným smerom.  Jeden z najväčších problémov je však dynamickosť prostredia, kde by aplikácia mala byť nasadená. Rýchle svetelné zmeny okolia,  nepredvídateľné pohyby ľudí na scéne (môže zastať, dotýkať sa, ťahať / tlačiť iný objekt)  toto všetko je nutné riešiť, tak aby aplikácia dosiahla čo najväčšej presnosti. 
+Pred zahájením tvorby aplikácie je nutné oboznámiť sa s problémami. Na prvý pohľad  sa môže zdať, že  počítanie osôb je jednoduchý proces. Predpokladajme, že virtuálna brána je umiestnená pri vstupe do miestnosti. Proces prechodu osoby znamená zvýšenie počtu prechodov osôb a na základe smeru danej osoby dekrementovať alebo inkrementovať počet osob nachádzajúcich sa v miestnosti. Systém musí byť navrhnutý tak, aby bol schopný detekovať a sledovať aj viacero ľudí, ktorí v jednom okamihu prechádzajú cez virtuálnu bránu rovnakým alebo rozličným smerom.  Jeden z najväčších problémov je však dynamickosť prostredia, kde by aplikácia mala byť nasadená. Rýchle svetelné zmeny okolia, nepredvídateľné pohyby ľudí na scéne (môže zastať, dotýkať sa, ťahať / tlačiť iný objekt)  toto všetko je nutné riešiť, tak aby aplikácia dosiahla čo najväčšej presnosti. 
 
 \section{Konceptuálny návrh systému}
 \label{sec:draft}
-Z problémov opísaných v sekcii \ref{sec:problems} je jasné, že jednoduché systémy typu Infračervená závora, nebudú mať dostatočne veľkú presnosť vzhľadom na prechody viacerých osôb v jednom časovom okamihu. Je nutné oprieť sa o metódy, ktoré vedia zaznamenať viac informácii o objekte, ktorý prechádza vymedzeným priestorom (tvar, rýchlosť, veľkosť, smer, atd …). 
+Z problémov opísaných v sekcii \ref{sec:problems} je jasné, že jednoduché systémy typu Infračervená závora, nebudú mať dostatočne veľkú presnosť pri zaznamenávaní prechodu viacerých osôb v jednom časovom okamihu. Je nutné oprieť sa o metódy, ktoré vedia zaznamenať viac informácii o objekte, ktorý prechádza vymedzeným priestorom (tvar, rýchlosť, veľkosť, smer, atd …). 
 
-Jedným z najkomplexnejších prostriedkov, ako dostať dáta do počítača na spracovanie je kamera, ktorá nám poslúži ako senzor.  Umiestnime ju na vrchnú priečku prechodu tak, aby snímala osoby z vrchu. Táto pozícia je najlepšia, lebo eliminuje možnosti zatienenia sledovaného objektu iným objektom na scéne.  
+Jedným z najkomplexnejších prostriedkov, ako dostať dáta do počítača na spracovanie je kamera, ktorá nám poslúži ako senzor. Umiestnime ju na vrchnú priečku prechodu tak, aby snímala osoby z vrchu. Táto pozícia je najlepšia, lebo eliminuje možnosti zatienenia sledovaného objektu iným objektom na scéne.  
 
 \begin{figure}[H]
     \centering
@@ -22,7 +22,7 @@ Jedným z najkomplexnejších prostriedkov, ako dostať dáta do počítača na 
     \begin{minipage}[p]{0.49\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/conturesConcept}
-        \caption{Obraz snímanej scény}
+        \caption{Obraz snímanej scény.}
     \end{minipage}
 \end{figure}
 
@@ -30,7 +30,7 @@ Jedným z najkomplexnejších prostriedkov, ako dostať dáta do počítača na 
 % Výber vhodného snímača priestoru virtuálnej brány je veľmi dôležitý. Ak senzor bude snímať dáta, ktoré sú enormne zaťažené šumom, realizácia funkčného algoritmu bude veľmi náročná, v niektorý prípadoch až nemožná. Táto práca sa zameriava na dva typy vhodných kamier \textbf{3D kamery} a\textbf{ 2D  RGB kamery}.
 
 \section{Výber hĺbkového snímača}
-Keďže  koncept snímania priestoru sa opiera o snímanie z výšky, veľmi silným kandidátom sú aktívne 3D kamery. Veľká výhoda je meranie na základe tvorby hĺbkového obrazu (sekcia \ref{sec:activeDeep}). Vďaka tomu, má meranie vysokú presnosť, nepotrebuje osvetlenie priestoru ani kontrastné prostredie.  Ďalšou veľkou výhodou je informácia o výške osoby, ktorá prechádza. Táto informácie je použiteľná v mnohých aspektoch ďalšieho spracovania. Na druhej strane technológia aktívneho 3D hĺbkomeru je náchylná na priame slnečné lúče. Tie dokážu merania veľmi znehodnotiť. Táto práca sa zaoberá testovaním troch rôznych aktívnych hĺbkomerov: 
+Keďže  koncept snímania priestoru sa opiera o snímanie z výšky, veľmi silným kandidátom sú aktívne 3D kamery. Veľká výhoda je meranie na základe tvorby hĺbkového obrazu (sekcia \ref{sec:activeDeep}). Vďaka tomu, má meranie vysokú presnosť, nepotrebuje osvetlenie priestoru ani kontrastné prostredie. Ďalšou veľkou výhodou je informácia o výške osoby, ktorá prechádza. Táto informácie je použiteľná v mnohých aspektoch ďalšieho spracovania. Na druhej strane technológia aktívneho 3D hĺbkomeru je náchylná na priame slnečné lúče. Tie dokážu merania veľmi znehodnotiť. Táto práca sa zaoberá testovaním troch rôznych aktívnych hĺbkomerov: 
 
 \begin{itemize}
 \item Kinect 360
@@ -42,41 +42,39 @@ Keďže  koncept snímania priestoru sa opiera o snímanie z výšky, veľmi sil
 
 \subsection{Základné informácie o testovaných hĺbkomeroch}
 \subsubsection{Kinect 360}
-Kamera sníma frekvenciou 30 Hz. Hĺbka je snímaná s presnosťou na 11 bitov, čiže hĺbka jedného pixlu môže nadobudnúť hodnoty od 0 do 2047.  Pracovný rozsah senzora je  1,2 - 3,5 metra.  Využíva technológiu vyvinutú firmou PrimaSence (sekcia \ref{sec:activeDeep}).
+Kamera sníma frekvenciou 30Hz. Hĺbka je snímaná s presnosťou na 11 bitov, čiže hĺbka jedného pixlu môže nadobudnúť hodnoty od 0 do 2.047.  Pracovný rozsah senzora je  1,2 - 3,5 metra.  Využíva technológiu vyvinutú firmou PrimaSence (sekcia \ref{sec:activeDeep}).
 
-Keďže od spoločnosti Microsoft neexistuje oficiálna podpora operačných systémov Unixového typu, na čítanie obrazu z kamery bola použitá knižnica \textit{libfreenect}\footnote{Knižnica dostupná na GitHub.com \url{https://github.com/OpenKinect/libfreenect.git}} ktorá je vyvíjaná a podporovaná komunitným spôsobom. Bola testovaná na \textit{RasperryPI verzie 3}\footnote{Malí počítač založeny na ARM technológii \url{https://www.raspberrypi.org}} s opereačným systémom Rasbian a MacOS Sierra. Použitá knižnica fungovala spoľahlivo. Na raspberry PI občasne vznikala menšia latencia spôsobená nižším výkonom.  
+Keďže od spoločnosti Microsoft neexistuje oficiálna podpora operačných systémov Unixového typu, na čítanie obrazu z kamery bola použitá knižnica \textit{libfreenect}\footnote{Knižnica dostupná na GitHub.com \url{https://github.com/OpenKinect/libfreenect.git}}, ktorá je vyvíjaná a podporovaná komunitným spôsobom. Bola testovaná na \textit{Raspberry Pi verzie 3}\footnote{Malý počítač založený na ARM technológii \url{https://www.raspberrypi.org}} s operačným systémom Rasbian a MacOS Sierra. Použitá knižnica fungovala spoľahlivo. Na Raspberry Pi občasne vznikala menšia latencia spôsobená nižším výkonom (príloha \ref{pr:kinect}).
 
-Výrazný problémom pri používaní tohoto hĺbkomeru je jeho veľkosť, váha, nutnosť externého napájania. Ďalší problém sa týka dostupnosti senzora. Senzor je zastaralí a už sa nevyrába. Cena sa momentálne stále drží na úrovni 100 eur. 
+Výrazný problémom pri používaní tohoto hĺbkomeru je jeho veľkosť, váha, nutnosť externého napájania. Ďalší problém sa týka dostupnosti senzora. Senzor je zastaralý a už sa nevyrába. Cena sa momentálne stále drží na úrovni 100 EUR. 
 
 \subsubsection{Orbbec Astra S}
 Ide o kameru, ktorá má veľmi podobný princíp funkčnosti ako kinect, čiže technológia je založená na vysielaní štrukturovaného svetla. Pracovný rozsah senzora je 0.4 – 2 metra. Kamera je pomerne malá a nepotrebuje externé napájanie. Používa USB 2.0 rozhranie. 
 
-Knižnice od spoločnosť Orbbec má veľmi dobrú podporu všetkých operačných systémov. Cena 150 eur. 
+Knižnice od spoločnosť Orbbec má veľmi dobrú podporu všetkých operačných systémov (príloha \ref{pr:astra}). Cena 150 EUR. 
 
 
 \subsubsection{Intel RealSence SR300}
-Je kamera, ktorá sa pomerne dosť líši od predchádzajúcich dvoch. Hlavným rozdielom je, že používa USB 3.0, čo znamená, že posiela väčšie množstvo dát a nieje možné ho pripojiť na \textit{RasperryPI}. Technológia snímania je založená na štrukturovanom svetle, podobne ako v predchádzajúcich dvoch prípadoch. Pracovný rozsah kamery je 25 až 70 cm. Cena kamery je tiež okolo 150 eur. 
+Je kamera, ktorá sa pomerne dosť líši od predchádzajúcich dvoch. Hlavným rozdielom je, že používa USB 3.0, čo znamená, že posiela väčšie množstvo dát a nie je možné ho pripojiť na \textit{RasperryPi}. Technológia snímania je založená na štrukturovanom svetle, podobne ako v predchádzajúcich dvoch prípadoch. Pracovný rozsah kamery je 25 až 70 cm. Cena kamery je tiež okolo 150 EUR. (príloha \ref{pr:realSence})
 
-\subsection{Porovnanie z hľadiska zorného poľa kamier}
-Prvým parametrom porovnávania je \textbf{zorné pole kamier}. Každá hĺbková kamera, podobne ako klasické RGB kamery, má zorný uhol daný použitou optikou kamery, hĺbkomery však majú navyše atribúty maximálnej a minimálnej vzdialenosti, na ktoré sú schopné vykonať meranie. Je to z dôvodu primárneho použitia kamery, pre ktoré ho výrobca vyrába. Napríklad \textit{Kinect 360} je určený pre hernú konzolu a detekciu celého tela, preto ma zorné pole veľmi veľké, aby mal hráč aj istú dávku voľnosti v pohybe. Presný opak kamery Kinect predstavuje \textit{Intel RealSence}, ktorá je určená na aplikácie ovládania PC rôznymi gestami. Z dôvodu takéhoto obmedzenia nieje možné postaviť aplikáciu sledovania prechodov ľudí na jednom type kamery.
-
+\subsection{Porovnanie zorného poľa kamier}
+Prvým parametrom porovnávania je \textbf{zorné pole kamier}. Každá hĺbková kamera, podobne ako klasické RGB kamery, má zorný uhol daný použitou optikou kamery. Hĺbkomery však majú navyše atribúty maximálnej a minimálnej vzdialenosti, na ktoré sú schopné vykonať meranie. Je to z dôvodu primárneho použitia kamery, pre ktoré ho výrobca vyrába. Napríklad \textit{Kinect 360} je určený pre hernú konzolu a detekciu celého tela, preto ma zorné pole veľmi veľké, aby mal hráč aj istú dávku voľnosti v pohybe. Presný opak kamery Kinect predstavuje \textit{Intel RealSence}, ktorá je určená na aplikácie ovládania PC rôznymi gestami. Z dôvodu takéhoto obmedzenia nie je možné postaviť aplikáciu sledovania prechodov ľudí na jednom type kamery.
 
 
 \begin{figure}[H]
 \begin{center}
 	\includegraphics[scale=0.60]{images/camerasViews}
-	\caption{Vizualizácia vertikálneho zorného pola hĺbkomerov}
+	\caption{Vizualizácia vertikálneho zorného pola hĺbkomerov.}
 	\end{center}
 \end{figure}
 
 Fyzické okolie virtuálnej brány nemusí dovoľovať umiestniť hĺbkomer do požadovanej snímacej výšky. Preto najlepším spôsobom je vyberať senzor špeciálne pre každé miesto nasadenia. Vďaka tomu je možné realizovať meranie od 2m do 4,5m.
 
 
-
 \subsection{Testovanie kvality snímania}
-Kvalita snímaného hĺbkového obrazu je veľmi dôležitým aspektom pre presnosť samotnej aplikácie. Keďže všetky testované hĺbkomery sú založené na technológii aktívnej triangulácie (kap~\ref{sec:activeDeep}) v rôznych svetelných podmienkach môže kvalita vytvorených hĺbkových záznamov výrazne kolísať v závislosti na kamere. Z toho dôvodu boli vykonané testy, na základe ktorých je možné porovnanie jednotlivých snímačov. 
+Kvalita snímaného hĺbkového obrazu je veľmi dôležitým aspektom pre presnosť samotnej aplikácie. Keďže všetky testované hĺbkomery sú založené na technológii aktívnej triangulácie (kap~\ref{sec:activeDeep}) v rôznych svetelných podmienkach, môže kvalita vytvorených hĺbkových záznamov výrazne kolísať v závislosti na kamere. Z toho dôvodu boli vykonané testy, na základe ktorých je možné porovnanie jednotlivých snímačov. 
 
-Predpokladajme, že každý bod scény, ktorý sa nachádza v zornom poli kamery sa premietne do šedotónového obrazu, v ktorom intenzita každého pixelu nadobúda hodnôt patriace do intervalu <0, 254> v závislosti na vzdialenosti. Body, ktoré nebolo možné zmerať (nekonečne ďaleko, šum, materiál alebo tvar objektu atd...) nadobúdajú hodnotu 255 (biely pixel). Potom metódu, ktorá zráta priemerný počet pixlov s hodnotou 255 na snímku, je možné použiť pre získanie \textbf{metriky} pre porovnanie. Avšak, \textit{metóda pre výpočet hodnotiacej metriky konverguje k objektívnemu výsledku len vtedy, ak každý objekt scény sa nachádza v zornom poli kamery, ktoré udáva jej výrobca.}       
+Predpokladajme, že každý bod scény, ktorý sa nachádza v zornom poli kamery sa premietne do šedotónového obrazu, v ktorom intenzita každého pixlu nadobúda hodnoty patriace do intervalu <0, 254> v závislosti na vzdialenosti. Body, ktoré nebolo možné zmerať (nekonečne ďaleko, šum, materiál alebo tvar objektu atd...) nadobúdajú hodnotu 255 (biely pixel). Potom metódu, ktorá zráta priemerný počet pixlov s hodnotou 255 na snímku, je možné použiť pre získanie \textbf{metriky} pre porovnanie. Avšak, \textit{metóda pre výpočet hodnotiacej metriky konverguje k objektívnemu výsledku len vtedy, ak sa každý objekt scény sa nachádza v zornom poli kamery, ktoré udáva jej výrobca} (príloha \ref{pr:metric}). 
 
 \subsubsection{Priebeh testovania}
 Testovanie spočívalo v umiestnení kamier na náhodné miesto, kde sa v jednom okamihu nahrával ten istý bod na všetkých testovaných kamerách. Vďaka tomu je zaručené, že všetky kamery boli vystavené rovnakým podmienkam merania. Následne sa na vzniknuté záznamy aplikovala metóda pre výpočet metriky. Meranie sa konalo v piatich opakovaniach: 
@@ -90,15 +88,14 @@ Testovanie spočívalo v umiestnení kamier na náhodné miesto, kde sa v jednom
 \end{enumerate}
 
 \subsubsection{Výsledky testov}
-Pri testovaní kamery \textit{Astra S} bola odhalená chyba. Kamera nieje schopná merať ľavý kraj o šírke 50 pixlov. Aby nedošlo k skresleniu v meraní, súčasťou hodnotiacej funkcie bolo odrezanie chybnej časti obrazu zo všetkých testovaných záznamov (aj na záznamoch z kamery Kinect). 
+Pri testovaní kamery \textit{Astra S} bola odhalená chyba. Kamera nie je schopná merať ľavý kraj o šírke 50 pixlov. Aby nedošlo k zkresleniu v meraní, súčasťou hodnotiacej funkcie bolo odrezanie chybnej časti obrazu zo všetkých testovaných záznamov (aj na záznamoch z kamery Kinect). 
 
 Ďalšia komplikácia nastala s kamerou \textit{Intel RealSence SR300}. Vzhľadom na jej extrémne malé zorné pole, sa nepodarilo splniť podmienku konvergencie hodnotiacej metódy. Ďalším problémom tejto kamery je nekompatibilita s Raspberry PI z dôvodu absencie USB 3.0. Z uvedených dôvodov táto kamera nebola zaradená do výsledkov testov.  
-
 
 \begin{figure}[H]
 \begin{center}
 	\includegraphics[scale=0.7]{images/noiseGraph}
-	\caption{Vizualizácia vertikálneho zorného pola hĺbkomerov}
+	\caption{Vizualizácia vertikálneho zorného pola hĺbkomerov.}
 	\end{center}
 \end{figure}
 

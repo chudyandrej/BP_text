@@ -1,0 +1,147 @@
+
+\chapter{Program pre čítanie kamery Orbbec Astra S}
+\label{pr:astra}
+\begin{lstlisting}[language=Python]
+import cv2
+import numpy as np
+from primesense import openni2
+from primesense import _openni2 as c_api
+def initCapture():
+    openni2.initialize("./lib/openni2") #Path to libOpenNI2.dylib
+    dev = openni2.Device.open_any()
+    depth_stream = dev.create_depth_stream()
+    depth_stream.start()
+    depth_stream.set_video_mode(c_api.OniVideoMode(pixelFormat = 
+            c_api.OniPixelFormat.ONI_PIXEL_FORMAT_DEPTH_100_UM,
+        resolutionX = 640, resolutionY = 480, fps = 30))
+    return depth_stream
+
+def cap_read(depth_stream):
+    raw_frame = depth_stream.read_frame()
+    frame_data = raw_frame.get_buffer_as_uint16()
+    img = np.frombuffer(frame_data, dtype=np.uint16)
+    img.shape = (1, 480, 640)
+    img = np.concatenate((img, img, img), axis=0)
+    img = np.swapaxes(img, 0, 2)
+    img = np.swapaxes(img, 0, 1)
+    img8 = (img/256).astype('uint8')
+    img8 = (255-img8)
+    return img8
+depth_stream = initCapture()
+while True:
+    frame = cap_read(depth_stream)
+    grayFrame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    cv2.imshow("image", frame)
+    cv2.waitKey(1)
+openni2.unload()
+
+\end{lstlisting}
+
+\chapter{Program pre nahrávanie kamery Intel RealSence SR30}
+\label{pr:realSence}
+\begin{lstlisting}[language=Python]
+import time
+import numpy as np
+import cv2
+import pyrealsense as pyrs
+import sys
+
+def cap_read(dev):
+    dev.wait_for_frame()
+    d = dev.depth * dev.depth_scale * 255
+    d = d.astype('uint8')
+    d = (255-d)
+    return d
+
+record = False
+if "-r" in sys.argv:
+    record = True
+    fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    out = cv2.VideoWriter('intelRealSenceSR300.avi',
+          fourcc, 30.0, (640,480))
+
+pyrs.start()
+dev = pyrs.Device()
+
+while True:
+    frame = cap_read(dev)
+    frame = cv2.cvtColor(frame, cv2.COLOR_GRAY2BGR)
+    if record:
+        out.write(frame)
+
+    cv2.imshow('frame', frame)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+\end{lstlisting}
+
+
+\chapter{Program pre nahrávanie kamery Kinect 360}
+\label{pr:kinect}
+\begin{lstlisting}[language=Python]
+import numpy as np
+import cv2
+import freenect
+
+def getDepthMap():    
+    depth, timestamp = freenect.sync_get_depth()
+    np.clip(depth, 0, 2**10 - 1, depth)
+    depth >>= 2
+    depth = depth.astype(np.uint8)
+    return depth
+
+fourcc = cv2.VideoWriter_fourcc(*'XVID')
+record_cap = cv2.VideoWriter('output.avi',fourcc, 20.0, (640,480))
+while(True):
+	depth = getDepthMap()
+	frame = cv2.cvtColor(depth,cv2.COLOR_GRAY2BGR)
+	record_cap.write(frame)
+	cv2.imshow('frame',frame)
+	if cv2.waitKey(1) & 0xFF == ord('q'):
+	    break
+\end{lstlisting}
+
+
+\chapter{Program pre výpočet metriky hĺbkovej kamery}
+\label{pr:metric}
+\begin{lstlisting}[language=Python]
+import numpy as np
+import cv2
+import sys
+
+cap = cv2.VideoCapture("./4/orbbecAstraS.mov")
+limint = 1000
+count = 0
+sumPixels = 0 
+while(True):
+    # Capture frame-by-frame
+    ret, frame = cap.read()
+
+    if count == limint:
+        print "Resolution: ", len(frame), "x", len(frame[0]) 
+        print "AVG pixels for frame: ", sumPixels / count
+        sys.exit(0)
+
+    frame = frame[:,40:]
+    sumPixels += np.count_nonzero(frame == 255)
+    count += 1
+    cv2.imshow('fgrayrame',frame)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+# When everything done, release the capture
+cap.release()
+cv2.destroyAllWindows()
+\end{lstlisting}
+
+\chapter{Obsah DVD}
+\label{pr:CD}
+DVD nosič obsahuje: 
+\begin{itemize}
+    \item Zdrojové kódy aplikácie založenej na snímaní 2D
+    \item Zdrojové kódy aplikácie založenej na snímaní 3D
+    \item Vzorka testovacích dát 
+    \item Kompletný obraz pamäťovej karty Rraspberry Pi
+    \item Demo aplikáce hranového detektora, globálneho prahovania, metód lokálneho prahovania využitých v práci
+    
+\end{itemize}
+\label{pr:metric}
