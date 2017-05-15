@@ -35,7 +35,7 @@ Všetky chyby spôsobené v programe používajúci \textbf{2D snímanie scény}
   \end{minipage}
 \end{figure}  
 
-Na vyriešenie opísanej chyby je nutné disponovať väčším množstvom informácii z obrazu. S použitou technológiou nie je možné spoľahlivo rozoznať, či sa jedná o vozík, ktorý je ťahaný za človekom alebo o ďalšieho človeka kráčajúceho za ním. V prípade, že zamestnanec vozík tlačil pred sebou, program dokázal jednotlivé kontúry pospájať do jednej veľkej a tak človek aj vozík predstavovali jeden objekt. Ďalším zdrojom chýb bol extrémne naplnený vozík, ktorého náklad bol tak vysoký, že pri prechode zabral celý obraz snímaný kamerou. Tento prípad sa programu nepodarilo detekovať a odstrániť.
+Na vyriešenie opísanej chyby je nutné disponovať väčším množstvom informácií z obrazu. S použitou technológiou nie je možné spoľahlivo rozoznať, či sa jedná o vozík, ktorý je ťahaný za človekom alebo o ďalšieho človeka kráčajúceho za ním. V prípade, že zamestnanec vozík tlačil pred sebou, program dokázal jednotlivé kontúry pospájať do jednej veľkej a tak človek aj vozík predstavovali jeden objekt. Ďalším zdrojom chýb bol extrémne naplnený vozík, ktorého náklad bol tak vysoký, že pri prechode zabral celý obraz snímaný kamerou. Tento prípad sa programu nepodarilo detekovať a odstrániť.
 
 V rovnakých podmienkach si program, ktorý používa \textbf{3D metódu snímania} poradil o niečo lepšie. Na 54 veľmi náročných prechodoch, situáciu vyhodnotil zle len 2x. Obe chyby boli spôsobené už spomínaným vozíkom s veľmi vysoko naloženým nákladom. Avšak ten istý vozík prechádzal štyrikrát, čiže v polovici prípadov si program využívajúci 3D poradil aj s touto hraničnou situáciou na rozdiel od programu využívajúceho 2D snímanie, ktorý zlyhal vo všetkých štyroch prípadoch. 
 
@@ -69,7 +69,7 @@ Hlavným dôvodom výraznejšieho úspechu 3D technológie je stabilnejšie urč
 Porovnanie v tejto kategórií je veľmi prínosné vzhľadom na ďalšie využitie v bezpečnostných aplikáciach. Obe technológie snímania majú svoje silné a slabé stránky.
 
 \subsubsection{3D technológia}
-Prvý problém predstavuje situácia, ak je stanovený výškový prach detekcie objektov (prípad s vozíkmi), alebo hĺbkový snímač nemá dostatočne veľký dosah snímania (až po zem). V týchto prípadoch môže útočník podliezť tento prah snímania. Ďalším potenciálnym problémom je, že hĺbkové senzory nevedia vykonať meranie oproti istému druhu materiálov, ako napríklad sklo. Na druhej strane sú však mnohé výhody, ako napríklad  nezávislosť na osvetlení priestoru. Snímanie funguje aj za úplnej tmy. 
+Prvý problém predstavuje situácia, ak je stanovený výškový prach detekcie objektov (prípad s vozíkmi) alebo hĺbkový snímač nemá dostatočne veľký dosah snímania (až po zem). V týchto prípadoch môže útočník podliezť tento prah snímania. Ďalším potenciálnym problémom je, že hĺbkové senzory nevedia vykonať meranie oproti istému druhu materiálov, ako napríklad sklo. Na druhej strane sú však mnohé výhody, ako napríklad  nezávislosť na osvetlení priestoru. Snímanie funguje aj za úplnej tmy. 
 
 \subsubsection{2D technológia}
 Slabinou tohto systému je samotný background substractor, ktorý pracuje na princípe učenia sa pozadia. To znamená, že ak sa potencionálny útočník postaví do obrazu a bude tam stáť dostatočne dlho, systém sa ho naučí ako súčasť pozadia. Takto môže postupne prejsť celý prechod. Ďalším všeobecným problémom technológie je svetlo. Prechod musí byť vždy dobre osvetlený (homogénne svetlo), inak detekcia nie je možná. 
@@ -77,7 +77,7 @@ Slabinou tohto systému je samotný background substractor, ktorý pracuje na pr
 \vspace{5mm}
 
 \subsection{Zhodnotenie}
-Systém založený na 2D snímaní pomocou kamery je vhodný pre aplikácie, kde nieje požadovaná extrémna presnosť, ale nízka cena. Príkladom môže byť obchod, ktorý si vedie štatistiku návštev. Na druhej strane 3D snímanie pomocou hĺbkomerov je vhodné pre bezpečnostné aplikácie súvisiace s objektovým zabezpečením. Výhodou je pridaný údaj o hĺbke, vysoká presnosť snímania, spoľahlivosť.       
+Systém založený na 2D snímaní pomocou kamery je vhodný pre aplikácie, kde nie je požadovaná extrémna presnosť, ale nízka cena. Príkladom môže byť obchod, ktorý si vedie štatistiku návštev. Na druhej strane 3D snímanie pomocou hĺbkomerov je vhodné pre bezpečnostné aplikácie súvisiace s objektovým zabezpečením. Výhodou je pridaný údaj o hĺbke, vysoká presnosť snímania, spoľahlivosť.       
 
 
 \section{Možnosti rozšírenia}
